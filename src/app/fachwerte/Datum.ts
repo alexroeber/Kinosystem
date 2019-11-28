@@ -1,6 +1,6 @@
 import {ok} from "assert";
 
-class Datum {
+export class Datum {
   private static readonly MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
   /**
@@ -63,7 +63,7 @@ class Datum {
   public equals(o: any) {
     if (o instanceof Datum) {
       return this.getTag() === o.getTag()
-        && this.getMonat() === o.getTag()
+        && this.getMonat() === o.getMonat()
         && this.getJahr() === o.getJahr();
     }
     return false;
