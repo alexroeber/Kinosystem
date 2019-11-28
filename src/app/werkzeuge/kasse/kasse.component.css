@@ -1,0 +1,45 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  font-size: x-large;
+  font-weight: bold;
+  font-style: italic;
+  color: blue;
+  text-align: center;
+  flex: 0 0 0;
+  margin-bottom: 6px;
+}
+
+.content {
+  flex: 1 0 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  margin-right: 4px;
+}
+
+.left, platzverkauf {
+  border-style: inset;
+  border-width: 1px;
+}
+
+.left, datumsauswahl {
+  flex: 0 0 0;
+}
+
+vorstellungsauswahl, platzverkauf {
+  flex: 1 0 0;
+}
+
+datumsauswahl, vorstellungsauswahl, platzverkauf {
+  padding: 6px;
+}

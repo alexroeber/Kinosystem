@@ -6,6 +6,9 @@ import {BezahlungComponent} from "./bezahlung/bezahlung.component";
 
 @NgModule({
   declarations: [PlatzverkaufComponent, BezahlungComponent],
+  exports: [
+    PlatzverkaufComponent
+  ],
   imports: [
     CommonModule
   ]
