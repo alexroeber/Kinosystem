@@ -81,7 +81,18 @@
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "whitespace": [
+      true,
+      "check-decl",
+      "check-operator",
+      "check-typecast",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-type-operator",
+      "check-preblock"
+    ]
   },
   "rulesDirectory": [
     "codelyzer"

@@ -1,6 +1,6 @@
 import {Datum} from "./Datum";
 
-describe("DatumComponent", () => {
+describe("Datum", () => {
   it("Teste compareTo", () => {
     const datum1 = new Datum(1, 12, 2018);
     const datum2 = new Datum(1, 1, 2019);
