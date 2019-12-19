@@ -1,5 +1,11 @@
 import {ok} from "assert";
 
+/**
+ * Diese Klasse stellt den Geldbetrag dar.
+ *
+ * @author Ochsenkopfantenne
+ *
+ */
 export class Geldbetrag {
   private betrag: number;
 
@@ -108,7 +114,7 @@ export class Geldbetrag {
     let s = "";
     s += this.betrag / 100;
     if (s === "0" && this.betrag < 0) {
-      s = "-" + s;
+      s = "-0";
     }
     const cent = Math.abs(this.betrag) % 100;
     if (cent > 0) {
