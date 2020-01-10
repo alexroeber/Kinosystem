@@ -1,0 +1,10 @@
+<div class="reihen">
+  <div *ngFor="let reihe of platzplan; index as i" class="sitze">
+    <div class="label">Reihe {{i + 1}}:</div>
+    <platz-button (active)="onPlatz(sitz)"
+                  *ngFor="let sitz of reihe;"
+                  [ausgewaehlt]="ausgewaehltePlaetze.has(sitz)"
+                  [platz]="sitz"
+                  [verkauft]="verkauftePlaetze.has(sitz)"></platz-button>
+  </div>
+</div>
