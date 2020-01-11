@@ -1,6 +1,7 @@
 import {ok} from "assert";
+import {EqualsHashCode} from "../shared/EqualsHashCode";
 
-export class Datum {
+export class Datum implements EqualsHashCode {
   private static readonly MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
   /**

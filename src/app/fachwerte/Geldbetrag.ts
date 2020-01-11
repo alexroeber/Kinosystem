@@ -1,4 +1,5 @@
 import {ok} from "assert";
+import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
  * Diese Klasse stellt den Geldbetrag dar.
@@ -6,7 +7,7 @@ import {ok} from "assert";
  * @author Ochsenkopfantenne
  *
  */
-export class Geldbetrag {
+export class Geldbetrag implements EqualsHashCode {
   private betrag: number;
 
   private constructor() {

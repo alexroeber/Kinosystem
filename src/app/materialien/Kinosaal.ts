@@ -1,5 +1,6 @@
 import {ok} from "assert";
 import {Platz} from "../fachwerte/Platz";
+import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
  * Ein Kinosaal. Ein Kinosaal hat einen Namen und kennt die Anzahl seiner
@@ -8,7 +9,7 @@ import {Platz} from "../fachwerte/Platz";
  * @author SE2-Team
  * @version SoSe 2014
  */
-export class Kinosaal {
+export class Kinosaal implements EqualsHashCode {
   /**
    * Initialisiert einen neuen Kinosaal.
    *

@@ -5,6 +5,7 @@ import {Datum} from "../fachwerte/Datum";
 import {Geldbetrag} from "../fachwerte/Geldbetrag";
 import {Film} from "./Film";
 import {Platz} from "../fachwerte/Platz";
+import {HashSet} from "../shared/HashSet";
 
 /**
  * Eine Vorstellung, für die Plätze verkauft und storniert werden können. Die
@@ -141,7 +142,7 @@ export class Vorstellung {
    *
    * @require plaetze != null
    */
-  public hatPlaetze(plaetze: Set<Platz>) {
+  public hatPlaetze(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
 
     let result = true;
@@ -161,11 +162,11 @@ export class Vorstellung {
    * @require plaetze != null
    * @require hatPlaetze(plaetze)
    */
-  public getPreisFuerPlaetze(plaetze: Set<Platz>) {
+  public getPreisFuerPlaetze(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 
-    return Geldbetrag.multipliziere(this.preis, plaetze.size);
+    return Geldbetrag.multipliziere(this.preis, plaetze.size());
   }
 
   /**
@@ -242,7 +243,7 @@ export class Vorstellung {
    *
    * @ensure alle angegebenen Plätze sind verkauft
    */
-  public verkaufePlaetze(plaetze: Set<Platz>) {
+  public verkaufePlaetze(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
     ok(this.sindVerkaufbar(plaetze), "Vorbedingung verletzt: sindVerkaufbar(plaetze)");
@@ -261,7 +262,7 @@ export class Vorstellung {
    * @require plaetze != null
    * @require hatPlaetze(plaetze)
    */
-  public sindVerkaufbar(plaetze: Set<Platz>) {
+  public sindVerkaufbar(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 
@@ -281,7 +282,7 @@ export class Vorstellung {
    *
    * @ensure alle angegebenen Plätze sind storniert
    */
-  public stornierePlaetze(plaetze: Set<Platz>) {
+  public stornierePlaetze(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
     ok(this.sindStornierbar(plaetze), "Vorbedingung verletzt: sindStornierbar(plaetze)");
@@ -300,7 +301,7 @@ export class Vorstellung {
    * @require plaetze != null
    * @require hatPlaetze(plaetze)
    */
-  public sindStornierbar(plaetze: Set<Platz>) {
+  public sindStornierbar(plaetze: HashSet<Platz>) {
     ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 

@@ -1,4 +1,5 @@
 import {ok} from "assert";
+import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
  * Eine Uhrzeit, angegeben in Stunden und Minuten.
@@ -6,7 +7,7 @@ import {ok} from "assert";
  * @author SE2-Team
  * @version SoSe 2014
  */
-export class Uhrzeit {
+export class Uhrzeit implements EqualsHashCode {
   /**
    * Wählt eine Uhrzeit aus.
    *

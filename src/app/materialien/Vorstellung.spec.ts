@@ -6,6 +6,7 @@ import {Vorstellung} from "./Vorstellung";
 import {Datum} from "../fachwerte/Datum";
 import {Geldbetrag} from "../fachwerte/Geldbetrag";
 import {Platz} from "../fachwerte/Platz";
+import {HashSet} from "../shared/HashSet";
 
 describe("Vorstellung", () => {
   let v: Vorstellung;
@@ -38,7 +39,7 @@ describe("Vorstellung", () => {
     expect(false).toBe(v.hatPlatz(new Platz(19, 50)));
     expect(false).toBe(v.hatPlatz(new Platz(20, 50)));
 
-    const set = new Set<Platz>();
+    const set = new HashSet<Platz>();
     expect(true).toBe(v.hatPlaetze(set));
     set.add(new Platz(0, 0));
     set.add(new Platz(19, 49));
@@ -48,7 +49,7 @@ describe("Vorstellung", () => {
   });
 
   it("teste getPreisFuerPlaetze", () => {
-    const set = new Set<Platz>();
+    const set = new HashSet<Platz>();
     expect(true).toBe(v.getPreisFuerPlaetze(set).equals(Geldbetrag.parseGeldbetrag("0,00")));
     set.add(new Platz(5, 5));
     set.add(new Platz(5, 6));
@@ -67,7 +68,7 @@ describe("Vorstellung", () => {
   });
 
   it("teste verkaufen mehrere", () => {
-    const set = new Set<Platz>();
+    const set = new HashSet<Platz>();
     set.add(new Platz(5, 5));
     set.add(new Platz(5, 6));
     set.add(new Platz(5, 7));
@@ -83,11 +84,11 @@ describe("Vorstellung", () => {
     const p1 = new Platz(5, 5);
     const p2 = new Platz(5, 6);
     const p3 = new Platz(5, 7);
-    const s1 = new Set<Platz>();
+    const s1 = new HashSet<Platz>();
     s1.add(p1);
     s1.add(p2);
     s1.add(p3);
-    const s2 = new Set<Platz>();
+    const s2 = new HashSet<Platz>();
     s2.add(p1);
     s2.add(p2);
 
@@ -103,15 +104,15 @@ describe("Vorstellung", () => {
     const p2 = new Platz(5, 6);
     const p3 = new Platz(5, 7);
     const p4 = new Platz(5, 8);
-    const s1 = new Set<Platz>();
+    const s1 = new HashSet<Platz>();
     s1.add(p1);
     s1.add(p2);
     s1.add(p3);
     s1.add(p4);
-    const s2 = new Set<Platz>();
+    const s2 = new HashSet<Platz>();
     s2.add(p1);
     s2.add(p2);
-    const s3 = new Set<Platz>();
+    const s3 = new HashSet<Platz>();
     s3.add(p3);
     s3.add(p4);
 
@@ -125,7 +126,7 @@ describe("Vorstellung", () => {
   });
 
   it("teste getAnzahlVerkauftePlaetze", () => {
-    const set = new Set<Platz>();
+    const set = new HashSet<Platz>();
     set.add(new Platz(5, 5));
     set.add(new Platz(5, 6));
     set.add(new Platz(5, 7));

@@ -1,4 +1,5 @@
 import {ok} from "assert";
+import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
  * Eine Sitzplatzangabe in einem Kinosaal. Der Platz setzt sich zusammen aus der
@@ -7,7 +8,7 @@ import {ok} from "assert";
  * @author SE2-Team
  * @version SoSe 2014
  */
-export class Platz {
+export class Platz implements EqualsHashCode {
   /**
    * Wählt einen Platz aus.
    *
