@@ -1,1 +1,10 @@
-<p>platzverkauf works!</p>
+<div class="wrapper">
+  <platzplan #platzplan (selectionChange)="reagiereAufNeuePlatzAuswahl()"></platzplan>
+  <div class="south">
+    <div>Gesamtpreis: {{aktuellerPreis}}</div>
+    <div class="right">
+      <button (click)="verkaufePlaetze()" [disabled]="!istVerkaufenMoeglich">Verkaufen</button>
+      <button (click)="stornierePlaetze()" [disabled]="!istStornierenMoeglich">Stornieren</button>
+    </div>
+  </div>
+</div>

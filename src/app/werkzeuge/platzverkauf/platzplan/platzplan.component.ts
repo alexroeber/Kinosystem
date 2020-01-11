@@ -1,47 +1,52 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Output} from "@angular/core";
 import {Platz} from "../../../fachwerte/Platz";
+import {HashSet} from "../../../shared/HashSet";
 
 @Component({
   selector: "platzplan",
   templateUrl: "./platzplan.component.html",
   styleUrls: ["./platzplan.component.scss"]
 })
-export class PlatzplanComponent implements OnChanges {
-  @Input() anzahlReihen: number;
-  @Input() anzahlSitzeProReihe: number;
-  @Output() selectionChange: EventEmitter<Set<Platz>>;
+export class PlatzplanComponent {
+  @Output() selectionChange: EventEmitter<void>;
 
   platzplan: Platz[][];
-  verkauftePlaetze: Set<Platz>;
-  ausgewaehltePlaetze: Set<Platz>;
+  verkauftePlaetze: HashSet<Platz>;
+  ausgewaehltePlaetze: HashSet<Platz>;
 
   constructor() {
-    this.selectionChange = new EventEmitter<Set<Platz>>();
-    this.verkauftePlaetze = new Set<Platz>();
-    this.ausgewaehltePlaetze = new Set<Platz>();
+    this.selectionChange = new EventEmitter<void>();
+    this.verkauftePlaetze = new HashSet<Platz>();
+    this.ausgewaehltePlaetze = new HashSet<Platz>();
   }
 
   onPlatz(platz: Platz) {
-    if (this.ausgewaehltePlaetze.has(platz)) {
-      this.ausgewaehltePlaetze.delete(platz);
+    if (this.ausgewaehltePlaetze.contains(platz)) {
+      this.ausgewaehltePlaetze.remove(platz);
     } else {
       this.ausgewaehltePlaetze.add(platz);
     }
+    this.selectionChange.emit();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.buildNewPlatzplan();
-  }
-
-  private buildNewPlatzplan() {
-    this.platzplan = new Array(this.anzahlReihen);
+  public setAnzahlPlaetze(anzahlReihen: number, anzahlSitzeProReihe: number) {
+    this.platzplan = new Array(anzahlReihen);
     this.verkauftePlaetze.clear();
     this.ausgewaehltePlaetze.clear();
-    for (let reihe = 0; reihe < this.anzahlReihen; reihe++) {
-      this.platzplan[reihe] = new Array(this.anzahlSitzeProReihe);
-      for (let sitz = 0; sitz < this.anzahlSitzeProReihe; sitz++) {
+    for (let reihe = 0; reihe < anzahlReihen; reihe++) {
+      this.platzplan[reihe] = new Array(anzahlSitzeProReihe);
+      for (let sitz = 0; sitz < anzahlSitzeProReihe; sitz++) {
         this.platzplan[reihe][sitz] = new Platz(reihe, sitz);
       }
     }
+    this.selectionChange.emit();
+  }
+
+  public markierePlatzAlsVerkauft(platz: Platz) {
+    this.verkauftePlaetze.add(platz);
+  }
+
+  public getAusgewaehltePlaetze() {
+    return new HashSet<Platz>(this.ausgewaehltePlaetze);
   }
 }
