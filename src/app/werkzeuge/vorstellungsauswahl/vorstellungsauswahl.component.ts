@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from "@angular/core";
 import {Vorstellung} from "../../materialien/Vorstellung";
 import {Tagesplan} from "../../materialien/Tagesplan";
 import {Datum} from "../../fachwerte/Datum";
@@ -13,7 +13,7 @@ import {Geldbetrag} from "../../fachwerte/Geldbetrag";
   templateUrl: "./vorstellungsauswahl.component.html",
   styleUrls: ["./vorstellungsauswahl.component.scss"]
 })
-export class VorstellungsauswahlComponent {
+export class VorstellungsauswahlComponent implements OnChanges {
   @Input() tagesplan: Tagesplan;
   @Output() vorstellungChanged: EventEmitter<Vorstellung>;
 
@@ -41,5 +41,9 @@ export class VorstellungsauswahlComponent {
   onVorstellung(vorstellung: Vorstellung) {
     this.ausgewaehlteVorstellung = vorstellung;
     this.vorstellungChanged.emit(vorstellung);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.onVorstellung(this.tagesplan.getVorstellungen()[0]);
   }
 }

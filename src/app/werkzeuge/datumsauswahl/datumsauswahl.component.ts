@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {Datum} from "../../fachwerte/Datum";
 
 @Component({
@@ -6,14 +6,14 @@ import {Datum} from "../../fachwerte/Datum";
   templateUrl: "./datumsauswahl.component.html",
   styleUrls: ["./datumsauswahl.component.scss"]
 })
-export class DatumsauswahlComponent {
+export class DatumsauswahlComponent implements OnInit {
   @Output() dateChanged: EventEmitter<Datum>;
 
   ausgewaehltesDatum: Datum;
 
   constructor() {
     this.dateChanged = new EventEmitter<Datum>();
-    this.ausgewaehltesDatum = new Datum(2, 2, 2020);
+    this.ausgewaehltesDatum = Datum.heute();
   }
 
   zurueck() {
@@ -23,6 +23,10 @@ export class DatumsauswahlComponent {
 
   weiter() {
     this.ausgewaehltesDatum = this.ausgewaehltesDatum.naechsterTag();
+    this.dateChanged.emit(this.ausgewaehltesDatum);
+  }
+
+  ngOnInit() {
     this.dateChanged.emit(this.ausgewaehltesDatum);
   }
 }

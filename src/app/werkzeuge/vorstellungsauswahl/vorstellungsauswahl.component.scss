@@ -1,8 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
 .list {
   width: max-content;
+  min-width: calc(100% - 10px);
   border-style: inset;
   border-width: 1px;
   padding: 4px;
+  flex-grow: 1;
 }
 
 .item {

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, Input, OnChanges, ViewChild} from "@angular/core";
 import {Vorstellung} from "../../../materialien/Vorstellung";
 import {Geldbetrag} from "../../../fachwerte/Geldbetrag";
 import {PlatzplanComponent} from "../platzplan/platzplan.component";
@@ -10,12 +10,13 @@ import {HashSet} from "../../../shared/HashSet";
   templateUrl: "./platzverkauf.component.html",
   styleUrls: ["./platzverkauf.component.scss"]
 })
-export class PlatzverkaufComponent implements OnInit {
+export class PlatzverkaufComponent implements OnChanges {
   @ViewChild("platzplan", {static: true}) platzplan: PlatzplanComponent;
+  @Input() vorstellung: Vorstellung;
+
   aktuellerPreis: Geldbetrag;
   istVerkaufenMoeglich: boolean;
   istStornierenMoeglich: boolean;
-  private vorstellung: Vorstellung;
 
   constructor() {
   }
@@ -39,12 +40,7 @@ export class PlatzverkaufComponent implements OnInit {
     this.aktualisierePlatzplan();
   }
 
-  ngOnInit() {
-    this.aktualisierePlatzplan();
-  }
-
-  public setVorstellung(vorstellung: Vorstellung) {
-    this.vorstellung = vorstellung;
+  ngOnChanges() {
     this.aktualisierePlatzplan();
   }
 

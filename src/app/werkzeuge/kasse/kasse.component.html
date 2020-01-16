@@ -2,9 +2,10 @@
   <div class="header">SE2-Kinosystem in Angular, Alexander Röber</div>
   <div class="content">
     <div class="left">
-      <datumsauswahl></datumsauswahl>
-      <vorstellungsauswahl></vorstellungsauswahl>
+      <datumsauswahl (dateChanged)="dateChanged($event)"></datumsauswahl>
+      <vorstellungsauswahl (vorstellungChanged)="vorstellungChanged($event)"
+                           [tagesplan]="tagesplan"></vorstellungsauswahl>
     </div>
-    <platzverkauf></platzverkauf>
+    <platzverkauf [vorstellung]="vorstellung"></platzverkauf>
   </div>
 </div>
