@@ -58,7 +58,7 @@ export class Geldbetrag implements EqualsHashCode {
   }
 
   public static parseGeldbetrag(s: string): Geldbetrag;
-  public static parseGeldbetrag(x: number, y: number): Geldbetrag;
+  public static parseGeldbetrag(euro: number, cent: number): Geldbetrag;
   public static parseGeldbetrag(v1: string | number, v2?: number) {
     if (typeof v1 === "string" && !v2) {
       return this.parseGeldbetragString(v1 as string);
@@ -81,12 +81,12 @@ export class Geldbetrag implements EqualsHashCode {
 
     const array = s.split(",");
 
-    const x = Number(array[0]);
+    const euro = Number(array[0]);
     if (array[1].includes("€")) {
       array[1] = array[1].split(" ")[0];
     }
-    const y = Number(array[1]);
-    return this.parseGeldbetragSplit(x, y);
+    const cent = Number(array[1]);
+    return this.parseGeldbetragSplit(euro, cent);
   }
 
   /**
