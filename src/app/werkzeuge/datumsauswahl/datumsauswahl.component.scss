@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  button {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    background-color: white;
+    border: #ddd 2px outset;
+  }
+
+  button:active {
+    border-style: inset;
+  }
+}
+
+.zurueck {
+  background-image: url(../../../assets/images/go-previous.png);
+}
+
+.weiter {
+  background-image: url(../../../assets/images/go-next.png);
+}
