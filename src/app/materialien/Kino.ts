@@ -3,6 +3,7 @@ import {Datum} from "../fachwerte/Datum";
 import {Tagesplan} from "./Tagesplan";
 import {Kinosaal} from "./Kinosaal";
 import {Vorstellung} from "./Vorstellung";
+import {HashMap} from "../shared/HashMap";
 
 /**
  * Ein Kino mit mehreren Kinosälen, in denen Vorstellungen laufen koennen.
@@ -11,7 +12,7 @@ import {Vorstellung} from "./Vorstellung";
  * @version SoSe 2014
  */
 export class Kino {
-  private tagesplaene: Map<Datum, Tagesplan>;
+  private tagesplaene: HashMap<Datum, Tagesplan>;
 
   /**
    * Initialisiert ein Kino.
@@ -31,7 +32,7 @@ export class Kino {
     ok(vorstellungen != null, "Vorbedingung verletzt: vorstellungen != null");
     ok(!kinosaele.includes(undefined), "Vorbedingung verletzt: kinosaele enthaelt keine Nullpointer");
 
-    this.tagesplaene = new Map<Datum, Tagesplan>();
+    this.tagesplaene = new HashMap<Datum, Tagesplan>();
 
     for (const vorstellung of vorstellungen) {
       ok(vorstellung != null, "Vorbedingung verletzt: vorstellungen enthaelt keine Nullpointer");
@@ -41,9 +42,9 @@ export class Kino {
 
       const datum = vorstellung.getDatum();
       let tagesplan = this.tagesplaene.get(datum);
-      if (tagesplan == null) {
+      if (tagesplan === undefined) {
         tagesplan = new Tagesplan(datum);
-        this.tagesplaene.set(datum, tagesplan);
+        this.tagesplaene.put(datum, tagesplan);
       }
       tagesplan.fuegeVorstellungHinzu(vorstellung);
     }
