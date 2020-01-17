@@ -1,0 +1,47 @@
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(242, 242, 242, 69%);
+  z-index: 0;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  background-color: white;
+  padding: 42px;
+  border-radius: 13px;
+  z-index: 1;
+
+  > * {
+    margin: 4px 0;
+  }
+}
+
+.eingabe {
+  width: 69px;
+
+  &.invalid {
+    border-color: red;
+  }
+}
+
+.ergebnis {
+  &.invalid {
+    background-color: #fcc;
+  }
+}

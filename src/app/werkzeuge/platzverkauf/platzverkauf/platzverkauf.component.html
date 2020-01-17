@@ -3,8 +3,9 @@
   <div class="south">
     <div>Gesamtpreis: {{aktuellerPreis}}</div>
     <div class="right">
-      <button (click)="verkaufePlaetze()" [disabled]="!istVerkaufenMoeglich">Verkaufen</button>
+      <button (click)="bezahlungLaeuft = true" [disabled]="!istVerkaufenMoeglich">Verkaufen</button>
       <button (click)="stornierePlaetze()" [disabled]="!istStornierenMoeglich">Stornieren</button>
     </div>
   </div>
 </div>
+<bezahlung (abgeschlossen)="verkaufePlaetze($event)" *ngIf="bezahlungLaeuft" [betrag]="aktuellerPreis"></bezahlung>

@@ -16,16 +16,6 @@ describe("Geldbetrag", () => {
     expect(betrag1.equals(betrag3)).toBe(false);
   });
 
-  it("Teste addieren", () => {
-    expect(Geldbetrag.addiere(betrag1, betrag2)).toEqual(betrag3);
-    expect(Geldbetrag.addiere(betrag1, betrag2).equals(betrag3)).toBe(true);
-  });
-
-  it("Teste multiplizieren", () => {
-    expect(Geldbetrag.multipliziere(betrag1, 2)).toEqual(betrag3);
-    expect(Geldbetrag.multipliziere(betrag1, 2).equals(betrag3)).toBe(true);
-  });
-
   it("Teste toString", () => {
     expect(betrag1.toString()).toEqual(betrag2.toString());
     expect(betrag3.toString()).toEqual("9,00 €");

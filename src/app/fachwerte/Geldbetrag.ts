@@ -7,10 +7,15 @@ import {EqualsHashCode} from "../shared/EqualsHashCode";
  * @author Ochsenkopfantenne
  *
  */
+// TODO: Fehler mit Tests finden und beheben
 export class Geldbetrag implements EqualsHashCode {
   private betrag: number;
 
   private constructor() {
+  }
+
+  public static groesserGleich(x: Geldbetrag, y: Geldbetrag) {
+    return x.betrag >= y.betrag;
   }
 
   /**
@@ -31,6 +36,15 @@ export class Geldbetrag implements EqualsHashCode {
 
     const gB = new Geldbetrag();
     gB.betrag = x.betrag + y.betrag;
+    return gB;
+  }
+
+  public static subtrahiere(x: Geldbetrag, y: Geldbetrag) {
+    ok(x, "Vorbedingung verletzt: x sollte truthy sein");
+    ok(y, "Vorbedingung verletzt: y sollte truthy sein");
+
+    const gB = new Geldbetrag();
+    gB.betrag = x.betrag - y.betrag;
     return gB;
   }
 

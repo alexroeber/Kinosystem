@@ -1,1 +1,13 @@
-<p>bezahlung works!</p>
+<div (click)="abschliessen(false)" class="background"></div>
+<div class="dialog">
+  <div>{{ueberschrift}}</div>
+  <form (submit)="formSubmit()">
+    <input #eingabe [ngClass]="{invalid: eingabeInvalid}" class="eingabe" type="text">
+    <input type="submit" value="Ok">
+  </form>
+  <div [ngClass]="{invalid: ergebnisInvalid}" class="ergebnis">{{ergebnis}}</div>
+  <div>
+    <button (click)="abschliessen(true)" [disabled]="ergebnisInvalid">Abschlie&szlig;en</button>
+    <button (click)="abschliessen(false)">Abbrechen</button>
+  </div>
+</div>

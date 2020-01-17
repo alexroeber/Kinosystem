@@ -17,6 +17,7 @@ export class PlatzverkaufComponent implements OnChanges {
   aktuellerPreis: Geldbetrag;
   istVerkaufenMoeglich: boolean;
   istStornierenMoeglich: boolean;
+  bezahlungLaeuft: boolean;
 
   constructor() {
   }
@@ -28,10 +29,12 @@ export class PlatzverkaufComponent implements OnChanges {
     this.aktualisierePreisAnzeige(plaetze);
   }
 
-  verkaufePlaetze() {
-    const plaetze = this.platzplan.getAusgewaehltePlaetze();
-    this.vorstellung.verkaufePlaetze(plaetze);
-    this.aktualisierePlatzplan();
+  verkaufePlaetze(abgeschlossen: boolean) {
+    if (abgeschlossen) {
+      this.vorstellung.verkaufePlaetze(this.platzplan.getAusgewaehltePlaetze());
+      this.aktualisierePlatzplan();
+    }
+    this.bezahlungLaeuft = false;
   }
 
   stornierePlaetze() {
