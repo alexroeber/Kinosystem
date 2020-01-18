@@ -1,4 +1,6 @@
 import {EqualsHashCode} from "./EqualsHashCode";
+import {Subject} from "rxjs";
+import {debounceTime} from "rxjs/operators";
 
 /**
  * Eine Implementation einer Map, die auf EqualsHashCode basiert.
@@ -9,6 +11,8 @@ export class HashMap<K extends EqualsHashCode, V> {
   private members: Entry<K, V>[][];
   private currentSize;
 
+  private expanding: Subject<void>;
+
   constructor(initial?: HashMap<K, V>) {
     if (initial) {
       this.init(initial.length);
@@ -16,6 +20,8 @@ export class HashMap<K extends EqualsHashCode, V> {
     } else {
       this.init(10);
     }
+    this.expanding = new Subject<void>();
+    this.expanding.pipe(debounceTime(200)).subscribe(() => this.expandSize());
   }
 
   /**
@@ -105,7 +111,7 @@ export class HashMap<K extends EqualsHashCode, V> {
       this.members[entry.hashCode() % this.currentSize].push(entry);
       this.length++;
       if (this.length > this.currentSize) {
-        setTimeout(() => this.expandSize(), 0);
+        this.expanding.next();
       }
       return undefined;
     } else {
@@ -125,7 +131,7 @@ export class HashMap<K extends EqualsHashCode, V> {
 
   private expandSize(): void {
     const old = this.flatMembers();
-    this.init(this.currentSize *= 2);
+    this.init(this.length *= 2);
     old.forEach(val => this.internalAdd(val));
   }
 }

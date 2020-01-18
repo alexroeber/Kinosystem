@@ -1,4 +1,6 @@
 import {EqualsHashCode} from "./EqualsHashCode";
+import {Subject} from "rxjs";
+import {debounceTime} from "rxjs/operators";
 
 /**
  * Eine Implementation eines Sets, das auf EqualsHashCode basiert.
@@ -8,6 +10,8 @@ export class HashSet<T extends EqualsHashCode> {
 
   private members: T[][];
   private currentSize;
+
+  private expanding: Subject<boolean>;
 
   constructor(initial?: ArrayLike<T> | HashSet<T>) {
     if (initial) {
@@ -23,6 +27,8 @@ export class HashSet<T extends EqualsHashCode> {
     } else {
       this.init(10);
     }
+    this.expanding = new Subject();
+    this.expanding.pipe(debounceTime(200)).subscribe(() => this.expandSize());
   }
 
   /**
@@ -35,7 +41,7 @@ export class HashSet<T extends EqualsHashCode> {
       this.members[value.hashCode() % this.currentSize].push(value);
       this.length++;
       if (this.length > this.currentSize) {
-        setTimeout(() => this.expandSize(), 0);
+        this.expanding.next();
       }
       return true;
     }
@@ -109,7 +115,8 @@ export class HashSet<T extends EqualsHashCode> {
 
   private expandSize(): void {
     const old = this.flatMembers();
-    this.init(this.currentSize *= 2);
+    this.init(this.length *= 2);
     old.forEach(val => this.add(val));
+    console.log(this);
   }
 }
