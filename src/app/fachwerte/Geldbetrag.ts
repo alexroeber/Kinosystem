@@ -68,7 +68,8 @@ export class Geldbetrag implements EqualsHashCode {
   }
 
   public static istGueltig(s: string) {
-    return s.match(/\d+,\d{2}( €)?/);
+    const match = s.match(/-?\d{1,9}(,\d{2})?( €)?/);
+    return match !== null && match[0].length === s.length;
   }
 
   public static parseGeldbetrag(s: string): Geldbetrag;
@@ -93,14 +94,15 @@ export class Geldbetrag implements EqualsHashCode {
   private static parseGeldbetragString(s: string) {
     ok(Geldbetrag.istGueltig(s), "Vorbedingung verletzt: s sollte gueltig sein");
 
-    const array = s.split(",");
-
-    const euro = Number(array[0]);
-    if (array[1].includes("€")) {
-      array[1] = array[1].split(" ")[0];
+    if (s.endsWith("€")) {
+      s = s.slice(0, s.length - 1);
     }
-    const cent = Number(array[1]);
-    return this.parseGeldbetragSplit(euro, cent);
+    const splits = s.split(",");
+    if (splits.length > 1) {
+      return this.parseGeldbetragSplit(+splits[0], +splits[1]);
+    } else {
+      return this.parseGeldbetragSplit(+s, 0);
+    }
   }
 
   /**
@@ -127,7 +129,7 @@ export class Geldbetrag implements EqualsHashCode {
 
   public toString() {
     let s = "";
-    s += this.betrag / 100;
+    s += Math.floor(this.betrag / 100);
     if (s === "0" && this.betrag < 0) {
       s = "-0";
     }
