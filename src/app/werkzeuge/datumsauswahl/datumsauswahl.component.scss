@@ -11,21 +11,25 @@
 
   button {
     padding: 0;
-    width: 36px;
-    height: 36px;
+    min-width: 69px;
+    height: 42px;
+    flex: 0 0 45%;
     background-color: white;
     border: #ddd 2px outset;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 5px;
   }
 
   button:active {
     border-style: inset;
   }
-}
 
-.zurueck {
-  background-image: url(../../../assets/images/go-previous.png);
-}
+  .zurueck {
+    background-image: url(../../../assets/images/go-previous.png);
+  }
 
-.weiter {
-  background-image: url(../../../assets/images/go-next.png);
+  .weiter {
+    background-image: url(../../../assets/images/go-next.png);
+  }
 }
