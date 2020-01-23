@@ -97,6 +97,7 @@ export class HashMap<K extends EqualsHashCode, V> {
   }
 
   private init(size: number): void {
+    size = size < 10 ? 10 : size;
     this.currentSize = size;
     this.members = new Array(size);
     this.length = 0;

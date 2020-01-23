@@ -101,6 +101,7 @@ export class HashSet<T extends EqualsHashCode> {
   }
 
   private init(size: number): void {
+    size = size < 10 ? 10 : size;
     this.currentSize = size;
     this.members = new Array(size);
     this.length = 0;
@@ -117,6 +118,5 @@ export class HashSet<T extends EqualsHashCode> {
     const old = this.flatMembers();
     this.init(this.length *= 2);
     old.forEach(val => this.add(val));
-    console.log(this);
   }
 }
