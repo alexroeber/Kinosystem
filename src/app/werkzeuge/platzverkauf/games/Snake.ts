@@ -9,7 +9,7 @@ import {Platz} from "../../../fachwerte/Platz";
 import {Werte} from "./Werte";
 import {Game} from "./Game";
 
-export class SnakeGame extends Game {
+export class Snake extends Game {
   public readonly sleep;
 
   // Die folgenden Variablen spiegeln Teile der Schlange in Snake wieder

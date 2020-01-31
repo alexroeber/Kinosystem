@@ -3,7 +3,8 @@ import {Platz} from "../../../fachwerte/Platz";
 import {HashSet} from "../../../shared/HashSet";
 import {Game} from "../games/Game";
 import {Werte} from "../games/Werte";
-import {SnakeGame} from "../games/Snake";
+import {Snake} from "../games/Snake";
+import {Tetris} from "../games/Tetris";
 
 type OpenWerte = Werte & {
   openAnzahlReihen: number
@@ -99,7 +100,9 @@ export class PlatzplanComponent {
   }
 
   private initGameList() {
-    this.games = [new SnakeGame(game => this.gameWasLost(game), this.werte)];
+    const gameLoseHandler = game => this.gameWasLost(game);
+    this.games = [new Snake(gameLoseHandler, this.werte),
+      new Tetris(gameLoseHandler, this.werte)];
     this.activeGameIndex = 0;
     this.games.forEach(game => game.init());
   }
