@@ -6,4 +6,5 @@ export abstract class Werte {
   public abstract readonly anzahlSitzeProReihe: number;
   public abstract readonly verkauft: HashSet<Platz>;
   public abstract readonly ausgewaehlt: HashSet<Platz>;
+  public abstract readonly texts: (string | number)[][];
 }

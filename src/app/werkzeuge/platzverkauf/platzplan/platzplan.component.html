@@ -4,7 +4,8 @@
     <platz-button (active)="onPlatz(sitz)"
                   *ngFor="let sitz of reihe;"
                   [ausgewaehlt]="ausgewaehltePlaetze.contains(sitz)"
-                  [platz]="sitz"
-                  [verkauft]="verkauftePlaetze.contains(sitz)"></platz-button>
+                  [text]="getText(sitz)"
+                  [verkauft]="verkauftePlaetze.contains(sitz)">
+    </platz-button>
   </div>
 </div>

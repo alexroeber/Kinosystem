@@ -5,12 +5,14 @@ import {Game} from "../games/Game";
 import {Werte} from "../games/Werte";
 import {Snake} from "../games/Snake";
 import {Tetris} from "../games/Tetris";
+import {MinesweeperGame} from "../games/Minesweeper";
 
 type OpenWerte = Werte & {
   openAnzahlReihen: number
   openAnzahlSitzeProReihe: number
   openAusgewaehlt: HashSet<Platz>
   openVerkauft: HashSet<Platz>
+  openTexts: (string | number)[][]
 };
 
 @Component({
@@ -22,6 +24,7 @@ export class PlatzplanComponent {
   @Output() selectionChange: EventEmitter<void>;
 
   platzplan: Platz[][];
+  texts: (string | number)[][];
   verkauftePlaetze: HashSet<Platz>;
   ausgewaehltePlaetze: HashSet<Platz>;
 
@@ -33,6 +36,7 @@ export class PlatzplanComponent {
   private gameActive: boolean;
   private savedVerkauft: HashSet<Platz>;
   private savedAusgewaehlt: HashSet<Platz>;
+  private savedTexts: (string | number)[][];
 
   constructor() {
     this.selectionChange = new EventEmitter<void>();
@@ -47,14 +51,17 @@ export class PlatzplanComponent {
   public setAnzahlPlaetze(anzahlReihen: number, anzahlSitzeProReihe: number) {
     this.stopGameIfRunning();
     this.platzplan = new Array(anzahlReihen);
+    this.texts = new Array(anzahlReihen);
     this.verkauftePlaetze.clear();
     this.ausgewaehltePlaetze.clear();
     this.werte.openAnzahlReihen = anzahlReihen;
     this.werte.openAnzahlSitzeProReihe = anzahlSitzeProReihe;
     for (let reihe = 0; reihe < anzahlReihen; reihe++) {
       this.platzplan[reihe] = new Array(anzahlSitzeProReihe);
+      this.texts[reihe] = new Array(anzahlSitzeProReihe);
       for (let sitz = 0; sitz < anzahlSitzeProReihe; sitz++) {
         this.platzplan[reihe][sitz] = new Platz(reihe, sitz);
+        this.texts[reihe][sitz] = sitz;
       }
     }
     this.selectionChange.emit();
@@ -74,12 +81,17 @@ export class PlatzplanComponent {
     this.selectionChange.emit();
   }
 
+  getText(platz: Platz) {
+    return this.texts[platz.getReihe()][platz.getSitz()];
+  }
+
   private initWerte() {
     this.werte = new class extends Werte {
       public openAnzahlReihen: number;
       public openAnzahlSitzeProReihe: number;
       public openAusgewaehlt: HashSet<Platz>;
       public openVerkauft: HashSet<Platz>;
+      public openTexts: (string | number)[][];
 
       get anzahlReihen(): number {
         return this.openAnzahlReihen;
@@ -96,13 +108,20 @@ export class PlatzplanComponent {
       get verkauft(): HashSet<Platz> {
         return this.openVerkauft;
       }
+
+      get texts(): (string | number)[][] {
+        return this.openTexts;
+      }
     }();
   }
 
   private initGameList() {
     const gameLoseHandler = game => this.gameWasLost(game);
-    this.games = [new Snake(gameLoseHandler, this.werte),
-      new Tetris(gameLoseHandler, this.werte)];
+    this.games = [
+      new MinesweeperGame(gameLoseHandler, this.werte),
+      new Snake(gameLoseHandler, this.werte),
+      new Tetris(gameLoseHandler, this.werte)
+    ];
     this.activeGameIndex = 0;
     this.games.forEach(game => game.init());
   }
@@ -128,14 +147,20 @@ export class PlatzplanComponent {
     game.deactivate();
     this.ausgewaehltePlaetze = this.savedAusgewaehlt;
     this.verkauftePlaetze = this.savedVerkauft;
+    this.texts = this.savedTexts;
     this.gameInterval = 0;
   }
 
   private activateGame(game: Game) {
     this.savedAusgewaehlt = new HashSet<Platz>(this.ausgewaehltePlaetze);
     this.savedVerkauft = new HashSet<Platz>(this.verkauftePlaetze);
+    this.savedTexts = [];
+    this.texts.forEach((val, i) => {
+      this.savedTexts[i] = [...val];
+    });
     this.werte.openAusgewaehlt = this.ausgewaehltePlaetze;
     this.werte.openVerkauft = this.verkauftePlaetze;
+    this.werte.openTexts = this.texts;
     this.gameActive = true;
     game.activate();
     this.gameInterval = setInterval(() => {
@@ -148,7 +173,8 @@ export class PlatzplanComponent {
   private dispatchKeyEvent(e: KeyboardEvent) {
     const code = e.key;
     const game = this.games[this.activeGameIndex];
-    if (code === "Enter" && e.ctrlKey) {
+    if (code === "g" && e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
       // Spiel starten/stoppen
       if (this.gameInterval) {
         clearInterval(this.gameInterval);
@@ -156,10 +182,11 @@ export class PlatzplanComponent {
       } else {
         this.activateGame(game);
       }
-    } else if (code === " ") {
+    } else if (code === " " && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       // Spiel pausieren/weiterlaufen lassen
       this.gameActive = !this.gameActive;
-    } else if (code === "Tab") {
+    } else if (code === "Tab" && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
       // Spiel wechseln
       clearInterval(this.gameInterval);
       const wasRunning = this.gameInterval;
@@ -170,7 +197,7 @@ export class PlatzplanComponent {
       if (wasRunning) {
         this.activateGame(newGame);
       }
-    } else {
+    } else if (this.gameInterval && this.gameActive) {
       return game.dispatchKeyEvent(e);
     }
   }
