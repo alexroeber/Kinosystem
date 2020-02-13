@@ -6,6 +6,7 @@ import {Werte} from "../games/Werte";
 import {Snake} from "../games/Snake";
 import {Tetris} from "../games/Tetris";
 import {MinesweeperGame} from "../games/Minesweeper";
+import {Conway} from "../games/Conway";
 
 type OpenWerte = Werte & {
   openAnzahlReihen: number
@@ -120,7 +121,8 @@ export class PlatzplanComponent {
     this.games = [
       new MinesweeperGame(gameLoseHandler, this.werte),
       new Snake(gameLoseHandler, this.werte),
-      new Tetris(gameLoseHandler, this.werte)
+      new Tetris(gameLoseHandler, this.werte),
+      new Conway(gameLoseHandler, this.werte)
     ];
     this.activeGameIndex = 0;
     this.games.forEach(game => game.init());
@@ -183,6 +185,7 @@ export class PlatzplanComponent {
         this.activateGame(game);
       }
     } else if (code === " " && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
       // Spiel pausieren/weiterlaufen lassen
       this.gameActive = !this.gameActive;
     } else if (code === "Tab" && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
