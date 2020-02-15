@@ -96,6 +96,10 @@ export class HashMap<K extends EqualsHashCode, V> {
     return this.length;
   }
 
+  /**
+   * Internes Initialisieren, auch geeignet zum leeren.
+   * @param size die (neue) Größe des internen Arrays
+   */
   private init(size: number): void {
     size = size < 10 ? 10 : size;
     this.currentSize = size;
@@ -106,6 +110,10 @@ export class HashMap<K extends EqualsHashCode, V> {
     }
   }
 
+  /**
+   * Interne Methode zum hinzufügen eines Elements.
+   * @param entry das neue ELement
+   */
   private internalAdd(entry: Entry<K, V>): V {
     const found = this.internalGet(entry);
     if (found === undefined) {
@@ -122,14 +130,24 @@ export class HashMap<K extends EqualsHashCode, V> {
     }
   }
 
+  /**
+   * Interne Methode zum zurückgeben eines gesuchten Elements.
+   * @param entry das gesuchte Element (nur relevant für den Key, siehe Entry)
+   */
   private internalGet(entry: Entry<K, V>): Entry<K, V> {
     return this.members[entry.hashCode() % this.currentSize].find(val => val.equals(entry));
   }
 
+  /**
+   * Interne Methode, die eine Liste aller Einträge der Map zurückgibt.
+   */
   private flatMembers(): Entry<K, V>[] {
     return this.members.reduce((all, next) => [...all, ...next], []);
   }
 
+  /**
+   * Interne Methode, die das interne Array vergrößert.
+   */
   private expandSize(): void {
     const old = this.flatMembers();
     this.init(this.length *= 2);
@@ -137,6 +155,11 @@ export class HashMap<K extends EqualsHashCode, V> {
   }
 }
 
+/**
+ * Interne Klasse, repräsentiert die Einträge der Map als Key-Value-Paar. Implementiert EqualsHashCode, aber die
+ * Gleichheit wird nur anhand des Keys ermittelt. Diese Absichtliche Ungenauigkeit erlaubt eine Nützliche
+ * Funktionalität für die Map.
+ */
 class Entry<K extends EqualsHashCode, V> implements EqualsHashCode {
   constructor(public key: K, public value: V) {
   }

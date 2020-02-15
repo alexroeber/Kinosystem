@@ -100,6 +100,10 @@ export class HashSet<T extends EqualsHashCode> {
     return this.length;
   }
 
+  /**
+   * Internes Initialisieren, auch geeignet zum leeren.
+   * @param size die (neue) Größe des internen Arrays
+   */
   private init(size: number): void {
     size = size < 10 ? 10 : size;
     this.currentSize = size;
@@ -110,10 +114,16 @@ export class HashSet<T extends EqualsHashCode> {
     }
   }
 
+  /**
+   * Interne Methode, die eine Liste aller Einträge des Sets zurückgibt.
+   */
   private flatMembers(): T[] {
     return this.members.reduce((all, next) => [...all, ...next], []);
   }
 
+  /**
+   * Interne Methode, die das interne Array vergrößert.
+   */
   private expandSize(): void {
     const old = this.flatMembers();
     this.init(this.length *= 2);
