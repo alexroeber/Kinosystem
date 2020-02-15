@@ -9,6 +9,5 @@ describe("Platz", () => {
     expect(FSK.FSK16).toBe(film.getFSK());
     expect(true).toBe(film.hatUeberlaenge());
     expect(film.toString()).toBeTruthy();
-    expect(film.getFormatiertenString()).toBeTruthy();
   });
 });

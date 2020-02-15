@@ -7,9 +7,6 @@ import {HashMap} from "../shared/HashMap";
 
 /**
  * Ein Kino mit mehreren Kinosälen, in denen Vorstellungen laufen koennen.
- *
- * @author SE2-Team
- * @version SoSe 2014
  */
 export class Kino {
   private tagesplaene: HashMap<Datum, Tagesplan>;
@@ -20,22 +17,25 @@ export class Kino {
    * @param kinosaele die Kinosäle des Kinos.
    * @param vorstellungen die Vorstellungen, die in dem Kino laufen.
    *
-   * @require saele != null
-   * @require vorstellungen != null
-   * @require saele enthaelt keine Nullpointer
-   * @require vorstellungen enthaelt keine Nullpointer
+   * @require truthy saele
+   * @require truthy vorstellungen
+   * @require saele enthaelt keine falsey Werte
+   * @require vorstellungen enthaelt keine falsey Werte
    * @require alle Vorstellungen laufen in uebergebenen Kinosälen
    * @require alle Vorstellungen fangen zu unterschiedlichen Zeiten an
    */
   public constructor(private kinosaele: Kinosaal[], vorstellungen: Vorstellung[]) {
-    ok(kinosaele != null, "Vorbedingung verletzt: kinosaele != null");
-    ok(vorstellungen != null, "Vorbedingung verletzt: vorstellungen != null");
-    ok(!kinosaele.includes(undefined), "Vorbedingung verletzt: kinosaele enthaelt keine Nullpointer");
+    ok(kinosaele, "Vorbedingung verletzt: truthy kinosaele");
+    ok(vorstellungen, "Vorbedingung verletzt: truthy vorstellungen");
+
+    kinosaele.forEach(saal => {
+      ok(saal, "Vorbedingung verletzt: kinosaele enthaelt keine falsey Werte");
+    });
 
     this.tagesplaene = new HashMap<Datum, Tagesplan>();
 
     for (const vorstellung of vorstellungen) {
-      ok(vorstellung != null, "Vorbedingung verletzt: vorstellungen enthaelt keine Nullpointer");
+      ok(vorstellung, "Vorbedingung verletzt: vorstellungen enthaelt keine falsey Werte");
 
       const saal = vorstellung.getKinosaal();
       ok(this.hatKinosaal(saal), "Vorbedingung verletzt: alle Vorstellungen laufen in uebergebenen Kinosaelen");
@@ -54,17 +54,21 @@ export class Kino {
    * Prüft, ob der angegebene Kinosaal zu diesem Kino gehört.
    *
    * @param kinosaal der Kinosaal.
+   *
+   * @require truthy kinosaal
    */
-  public hatKinosaal(kinosaal: Kinosaal) {
+  public hatKinosaal(kinosaal: Kinosaal): boolean {
+    ok(kinosaal, "Vorbedingung verletzt: truthy kinosaal");
+
     return this.kinosaele.some(s => s.equals(kinosaal));
   }
 
   /**
    * Gibt die Kinosäle dieses Kinos zurück.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getKinosaele() {
+  public getKinosaele(): Kinosaal[] {
     return [...this.kinosaele];
   }
 
@@ -73,14 +77,14 @@ export class Kino {
    *
    * @param tag das Datum.
    *
-   * @require tag != null
+   * @require truthy tag
    * @ensure result != null
    */
-  public getTagesplan(tag: Datum) {
-    ok(tag != null, "Vorbedingung verletzt: tag != null");
+  public getTagesplan(tag: Datum): Tagesplan {
+    ok(tag, "Vorbedingung verletzt: truthy tag");
 
     let tagesplan = this.tagesplaene.get(tag);
-    if (tagesplan == null) {
+    if (!tagesplan) {
       tagesplan = new Tagesplan(tag);
     }
     return tagesplan;

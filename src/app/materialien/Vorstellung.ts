@@ -12,9 +12,6 @@ import {HashSet} from "../shared/HashSet";
  * Vorstellung speichert zum einen die Daten der eigentlichen Vorstellung (wann
  * und wo läuft welcher Film) und zum anderen, welche Plätze für diese
  * Vorstellung bereits verkauft wurden.
- *
- * @author SE2-Team
- * @version SoSe 2014
  */
 export class Vorstellung {
   private readonly verkauft: boolean[][];
@@ -30,27 +27,28 @@ export class Vorstellung {
    * @param datum das Datum der Vorstellung
    * @param preis der Verkaufspreis als int für Karten zu dieser Vorstellung.
    *
-   * @require kinosaal != null
-   * @require film != null
-   * @require anfangszeit != null
-   * @require endzeit != null
-   * @require datum != null
-   * @require preis >= 0
+   * @require truthy kinosaal
+   * @require truthy film
+   * @require truthy anfangszeit
+   * @require truthy endzeit
+   * @require truthy datum
+   * @require truthy preis
    *
-   * @ensure getKinosaal() == kinosaal
-   * @ensure getFilm() == film
-   * @ensure getAnfangszeit() == anfangszeit
-   * @ensure getEndzeit() == endzeit
-   * @ensure getDatum() == datum
-   * @ensure getPreis() == preis
+   * @ensure getKinosaal() === kinosaal
+   * @ensure getFilm() === film
+   * @ensure getAnfangszeit() === anfangszeit
+   * @ensure getEndzeit() === endzeit
+   * @ensure getDatum() === datum
+   * @ensure getPreis() === preis
    */
   public constructor(private readonly kinosaal: Kinosaal, private readonly film: Film, private readonly anfangszeit: Uhrzeit,
                      private readonly endzeit: Uhrzeit, private readonly datum: Datum, private readonly preis: Geldbetrag) {
-    ok(kinosaal != null, "Vorbedingung verletzt: saal != null");
-    ok(film != null, "Vorbedingung verletzt: film != null");
-    ok(anfangszeit != null, "Vorbedingung verletzt: anfangszeit != null");
-    ok(endzeit != null, "Vorbedingung verletzt: endzeit != null");
-    ok(datum != null, "Vorbedingung verletzt: datum != null");
+    ok(kinosaal, "Vorbedingung verletzt: truthy saal");
+    ok(film, "Vorbedingung verletzt: truthy film");
+    ok(anfangszeit, "Vorbedingung verletzt: truthy anfangszeit");
+    ok(endzeit, "Vorbedingung verletzt: truthy endzeit");
+    ok(datum, "Vorbedingung verletzt: truthy datum");
+    ok(preis, "Vorbedingung verletzt: truthy datum");
 
     this.verkauft = [];
     for (let i = 0; i < kinosaal.getAnzahlReihen(); i++) {
@@ -65,45 +63,45 @@ export class Vorstellung {
   /**
    * Gibt den Kinosaal zurück, in dem diese Vorstellung läuft.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getKinosaal() {
+  public getKinosaal(): Kinosaal {
     return this.kinosaal;
   }
 
   /**
    * Gibt den Film zurück, der in dieser Vorstellung gezeigt wird.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getFilm() {
+  public getFilm(): Film {
     return this.film;
   }
 
   /**
    * Gibt die Uhrzeit zurück, zu der diese Vorstellung beginnt.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getAnfangszeit() {
+  public getAnfangszeit(): Uhrzeit {
     return this.anfangszeit;
   }
 
   /**
    * Gibt die Uhrzeit zurück, zu der diese Vorstellung endet.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getEndzeit() {
+  public getEndzeit(): Uhrzeit {
     return this.endzeit;
   }
 
   /**
    * Gibt das Datum zurück, an dem diese Vorstellung läuft.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getDatum() {
+  public getDatum(): Datum {
     return this.datum;
   }
 
@@ -112,7 +110,7 @@ export class Vorstellung {
    *
    * @ensure result > 0
    */
-  public getPreis() {
+  public getPreis(): Geldbetrag {
     return this.preis;
   }
 
@@ -120,14 +118,12 @@ export class Vorstellung {
    * Prüft, ob der angegebene Sitzplatz in dieser Vorstellung vorhanden ist.
    *
    * @param platz der Sitzplatz.
+   * @return <code>true</code>, falls der Platz existiert, <code>false</code> sonst.
    *
-   * @return <code>true</code>, falls der Platz existiert, <code>false</code>
-   *         sonst.
-   *
-   * @require platz != null
+   * @require truthy platz
    */
-  public hatPlatz(platz: Platz) {
-    ok(platz != null, "Vorbedingung verletzt: platz != null");
+  public hatPlatz(platz: Platz): boolean {
+    ok(platz, "Vorbedingung verletzt: truthy platz");
 
     return this.kinosaal.hatPlatz(platz);
   }
@@ -137,13 +133,12 @@ export class Vorstellung {
    * sind.
    *
    * @param plaetze die Sitzplätze.
-   *
    * @return true, falls alle Plätze existieren, false sonst.
    *
-   * @require plaetze != null
+   * @require truthy plaetze
    */
-  public hatPlaetze(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public hatPlaetze(plaetze: HashSet<Platz>): boolean {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
 
     let result = true;
     plaetze.forEach(p => {
@@ -156,14 +151,13 @@ export class Vorstellung {
    * Gibt den Gesamtpreis für die angegebenen Plätze zurücke
    *
    * @param plaetze die Sitzplätze.
+   * @return Gesamtpreis
    *
-   * @return Gesamtpreis als int
-   *
-   * @require plaetze != null
+   * @require truthy plaetze
    * @require hatPlaetze(plaetze)
    */
-  public getPreisFuerPlaetze(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public getPreisFuerPlaetze(plaetze: HashSet<Platz>): Geldbetrag {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 
     return Geldbetrag.multipliziere(this.preis, plaetze.size());
@@ -173,15 +167,13 @@ export class Vorstellung {
    * Gibt an, ob ein bestimmter Platz bereits verkauft ist.
    *
    * @param platz der Sitzplatz.
+   * @return <code>true</code>, falls der Platz verkauft ist, <code>false</code> sonst.
    *
-   * @return <code>true</code>, falls der Platz verkauft ist,
-   *         <code>false</code> sonst.
-   *
-   * @require platz != null
+   * @require truthy platz
    * @require hatPlatz(platz)
    */
-  public istPlatzVerkauft(platz: Platz) {
-    ok(platz != null, "Vorbedingung verletzt: platz != null");
+  public istPlatzVerkauft(platz: Platz): boolean {
+    ok(platz, "Vorbedingung verletzt: truthy platz");
     ok(this.hatPlatz(platz), "Vorbedingung verletzt: hatPlatz(platz)");
 
     return this.verkauft[platz.getReihe()][platz.getSitz()];
@@ -192,14 +184,14 @@ export class Vorstellung {
    *
    * @param platz der Sitzplatz.
    *
-   * @require platz != null
+   * @require truthy platz
    * @require hatPlatz(platz)
-   * @require !istPlatzVerkauft(reihe, sitz)
+   * @require !istPlatzVerkauft(platz)
    *
-   * @ensure istPlatzVerkauft(reihe, sitz)
+   * @ensure istPlatzVerkauft(platz)
    */
-  public verkaufePlatz(platz: Platz) {
-    ok(platz != null, "Vorbedingung verletzt: platz != null");
+  public verkaufePlatz(platz: Platz): void {
+    ok(platz, "Vorbedingung verletzt: truthy platz");
     ok(this.hatPlatz(platz), "Vorbedingung verletzt: hatPlatz(platz)");
     ok(!this.istPlatzVerkauft(platz), "Vorbedingung verletzt: !istPlatzVerkauft(platz)");
 
@@ -212,14 +204,14 @@ export class Vorstellung {
    *
    * @param platz der Sitzplatz.
    *
-   * @require platz != null
-   * @require hatPlatz(reihe, sitz)
-   * @require istPlatzVerkauft(reihe, sitz)
+   * @require truthy platz
+   * @require hatPlatz(platz)
+   * @require istPlatzVerkauft(rplatz)
    *
-   * @ensure !istPlatzVerkauft(reihe, sitz)
+   * @ensure !istPlatzVerkauft(platz)
    */
-  public stornierePlatz(platz: Platz) {
-    ok(platz != null, "Vorbedingung verletzt: platz != null");
+  public stornierePlatz(platz: Platz): void {
+    ok(platz, "Vorbedingung verletzt: truthy platz");
     ok(this.hatPlatz(platz), "Vorbedingung verletzt: hatPlatz(platz)");
     ok(this.istPlatzVerkauft(platz), "Vorbedingung verletzt: istPlatzVerkauft(platz)");
 
@@ -230,21 +222,21 @@ export class Vorstellung {
   /**
    * Gibt die Anzahl verkaufter Plätze zurück.
    */
-  public getAnzahlVerkauftePlaetze() {
+  public getAnzahlVerkauftePlaetze(): number {
     return this.anzahlVerkauftePlaetze;
   }
 
   /**
    * Verkauft die gegebenen Plätze.
    *
-   * @require plaetze != null
+   * @require truthy plaetze
    * @require hatPlaetze(plaetze)
    * @require sindVerkaufbar(plaetze)
    *
    * @ensure alle angegebenen Plätze sind verkauft
    */
-  public verkaufePlaetze(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public verkaufePlaetze(plaetze: HashSet<Platz>): void {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
     ok(this.sindVerkaufbar(plaetze), "Vorbedingung verletzt: sindVerkaufbar(plaetze)");
 
@@ -259,11 +251,11 @@ export class Vorstellung {
    *
    * Liefert true, wenn alle Plätze verkaufbar sind, sonst false.
    *
-   * @require plaetze != null
+   * @require truthy plaetze
    * @require hatPlaetze(plaetze)
    */
-  public sindVerkaufbar(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public sindVerkaufbar(plaetze: HashSet<Platz>): boolean {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 
     let result = true;
@@ -276,14 +268,14 @@ export class Vorstellung {
   /**
    * Storniert die gegebenen Plätze.
    *
-   * @require plaetze != null
+   * @require truthy plaetze
    * @require hatPlaetze(plaetze)
    * @require sindStornierbar(plaetze)
    *
    * @ensure alle angegebenen Plätze sind storniert
    */
-  public stornierePlaetze(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public stornierePlaetze(plaetze: HashSet<Platz>): void {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
     ok(this.sindStornierbar(plaetze), "Vorbedingung verletzt: sindStornierbar(plaetze)");
 
@@ -298,11 +290,11 @@ export class Vorstellung {
    *
    * Liefert true, wenn alle Plätze stornierbar sind, sonst false.
    *
-   * @require plaetze != null
+   * @require truthy plaetze
    * @require hatPlaetze(plaetze)
    */
-  public sindStornierbar(plaetze: HashSet<Platz>) {
-    ok(plaetze != null, "Vorbedingung verletzt: plaetze != null");
+  public sindStornierbar(plaetze: HashSet<Platz>): boolean {
+    ok(plaetze, "Vorbedingung verletzt: truthy plaetze");
     ok(this.hatPlaetze(plaetze), "Vorbedingung verletzt: hatPlaetze(plaetze)");
 
     let result = true;
@@ -312,7 +304,7 @@ export class Vorstellung {
     return result;
   }
 
-  public toString() {
+  public toString(): string {
     return "Vorstellung: " + this.anfangszeit + ", " + this.kinosaal + ", " + this.film;
   }
 }

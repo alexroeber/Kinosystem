@@ -3,11 +3,7 @@ import {Platz} from "../fachwerte/Platz";
 import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
- * Ein Kinosaal. Ein Kinosaal hat einen Namen und kennt die Anzahl seiner
- * Sitzplätze.
- *
- * @author SE2-Team
- * @version SoSe 2014
+ * Ein Kinosaal. Ein Kinosaal hat einen Namen und kennt die Anzahl seiner Sitzplätze.
  */
 export class Kinosaal implements EqualsHashCode {
   /**
@@ -17,26 +13,22 @@ export class Kinosaal implements EqualsHashCode {
    * @param anzahlReihen die Anzahl der Reihen.
    * @param anzahlSitzeProReihe die Anzahl der Sitze Pro Reihe.
    *
-   * @require name != null
    * @require anzahlReihen > 0
    * @require anzahlSitzeProReihe > 0
    *
-   * @ensure getName() == name
-   * @ensure getAnzahlReihen() == anzahlReihen
-   * @ensure getAnzahlSitzeProReihe() == anzahlSitzeProReihe
+   * @ensure getName() === name
+   * @ensure getAnzahlReihen() === anzahlReihen
+   * @ensure getAnzahlSitzeProReihe() === anzahlSitzeProReihe
    */
   public constructor(private name: string, private anzahlReihen: number, private anzahlSitzeProReihe: number) {
-    ok(name != null, "Vorbedingung verletzt: name != null");
     ok(anzahlReihen > 0, "Vorbedingung verletzt: anzahlReihen > 0");
     ok(anzahlSitzeProReihe > 0, "Vorbedingung verletzt: anzahlSitzeProReihe > 0");
   }
 
   /**
    * Gibt den Namen dieses Kinosaals zurück.
-   *
-   * @ensure result != null
    */
-  public getName() {
+  public getName(): string {
     return this.name;
   }
 
@@ -45,7 +37,7 @@ export class Kinosaal implements EqualsHashCode {
    *
    * @ensure result > 0
    */
-  public getAnzahlReihen() {
+  public getAnzahlReihen(): number {
     return this.anzahlReihen;
   }
 
@@ -54,16 +46,16 @@ export class Kinosaal implements EqualsHashCode {
    *
    * @ensure result > 0
    */
-  public getAnzahlSitzeProReihe() {
+  public getAnzahlSitzeProReihe(): number {
     return this.anzahlSitzeProReihe;
   }
 
   /**
    * Gibt eine Liste der Plätze in diesem Kinosaal zurück.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getPlaetze() {
+  public getPlaetze(): Platz[] {
     const kinoPlaetze: Platz[] = [];
     for (let i = 0; i < this.anzahlReihen; i++) {
       for (let j = 0; j < this.anzahlSitzeProReihe; j++) {
@@ -77,20 +69,18 @@ export class Kinosaal implements EqualsHashCode {
    * Prüft, ob es den angegebenen Platz in dem Kinosaal gibt.
    *
    * @param platz der Platz.
+   * @return <code>true</code>, falls der Platz existiert, <code>false</code> sonst.
    *
-   * @return <code>true</code>, falls der Platz existiert, <code>false</code>
-   *         sonst.
-   *
-   * @require platz != null
+   * @require truthy platz
    */
-  public hatPlatz(platz: Platz) {
-    ok(platz != null, "Vorbedingung verletzt: platz != null");
+  public hatPlatz(platz: Platz): boolean {
+    ok(platz, "Vorbedingung verletzt: truthy platz");
 
     return (platz.getReihe() >= 0 && platz.getReihe() < this.anzahlReihen)
       && (platz.getSitz() >= 0 && platz.getSitz() < this.anzahlSitzeProReihe);
   }
 
-  public equals(obj: any) {
+  public equals(obj: any): boolean {
     if (obj instanceof Kinosaal) {
       return this.name === obj.name
         && this.anzahlReihen === obj.anzahlReihen
@@ -99,7 +89,7 @@ export class Kinosaal implements EqualsHashCode {
     return false;
   }
 
-  public hashCode() {
+  public hashCode(): number {
     const prime = 31;
     let result = 1;
     result = prime * result + this.anzahlReihen;
@@ -108,7 +98,7 @@ export class Kinosaal implements EqualsHashCode {
     return result;
   }
 
-  public toString() {
+  public toString(): string {
     return "Kinosaal: Name=" + this.name;
   }
 }

@@ -4,9 +4,6 @@ import {FSK} from "../fachwerte/FSK";
 /**
  * Ein Film. Ein Film besteht aus einem Titel, einer Länge in Minuten, einer
  * Altersfreigabe und einer Angabe darueber, ob der Film Überlänge hat.
- *
- * @author SE2-Team
- * @version SoSe 2014
  */
 export class Film {
   /**
@@ -17,58 +14,50 @@ export class Film {
    * @param fsk die Altersfreigabe fuer diesen Film.
    * @param ueberlaenge hat der Film Überlaenge?
    *
-   * @require titel != null
+   * @require typeof titel === "string"
    * @require laenge > 0
-   * @require fsk != null
+   * @require truthy fsk
    *
-   * @ensure getTitel() == titel
-   * @ensure getLaenge() == laenge
-   * @ensure getFSK() == fsk
-   * @ensure hatUeberlaenge() == ueberlaenge
+   * @ensure getTitel() === titel
+   * @ensure getLaenge() === laenge
+   * @ensure getFSK() === fsk
+   * @ensure hatUeberlaenge() === ueberlaenge
    */
   public constructor(private titel: string, private laenge: number, private fsk: FSK, private ueberlaenge: boolean) {
-    ok(titel != null, "Vorbedingung verletzt: titel != null");
+    ok(typeof titel === "string", "Vorbedingung verletzt: typeof titel === \"string\"");
     ok(laenge > 0, "Vorbedingung verletzt: laenge > 0");
-    ok(fsk != null, "Vorbedingung verletzt: fsk != null");
+    ok(fsk, "Vorbedingung verletzt: truthy fsk");
   }
 
   /**
    * Gibt den Titel dieses Films zurück.
-   *
-   * @ensure result != null
    */
-  public getTitel() {
+  public getTitel(): string {
     return this.titel;
   }
 
   /**
    * Gibt die Länge dieses Films in Minuten zurück.
    */
-  public getLaenge() {
+  public getLaenge(): number {
     return this.laenge;
   }
 
   /**
    * Gibt die Altersfreigabe fuer diesen Film zurück.
-   *
-   * @ensure result != null
    */
-  public getFSK() {
+  public getFSK(): FSK {
     return this.fsk;
   }
 
   /**
    * Gibt zurück, ob dieser Film Überlaenge hat.
    */
-  public hatUeberlaenge() {
+  public hatUeberlaenge(): boolean {
     return this.ueberlaenge;
   }
 
-  public toString() {
-    return "Film: Titel=" + this.titel;
-  }
-
-  public getFormatiertenString() {
+  public toString(): string {
     return this.titel + ", " + this.fsk;
   }
 }

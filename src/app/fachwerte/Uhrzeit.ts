@@ -3,9 +3,6 @@ import {EqualsHashCode} from "../shared/EqualsHashCode";
 
 /**
  * Eine Uhrzeit, angegeben in Stunden und Minuten.
- *
- * @author SE2-Team
- * @version SoSe 2014
  */
 export class Uhrzeit implements EqualsHashCode {
   /**
@@ -14,31 +11,31 @@ export class Uhrzeit implements EqualsHashCode {
    * @param stunden der Stundenanteil der Uhrzeit.
    * @param minuten der Minutenanteil der Uhrzeit.
    *
-   * @require stunden >= 0 && stunden < 24
-   * @require minuten >= 0 && minuten < 60
-   * @ensure getStunden() == stunden
-   * @ensure getMinuten() == minuten
+   * @require 0 <= stunden < 24
+   * @require 0 <= minuten < 60
+   * @ensure getStunden() === stunden
+   * @ensure getMinuten() === minuten
    */
   public constructor(private readonly stunden: number, private readonly minuten: number) {
-    ok(stunden >= 0 && stunden < 24, "Vorbedingung verletzt: stunden >= 0 && stunden < 24");
-    ok(minuten >= 0 && minuten < 60, "Vorbedingung verletzt: minuten >= 0 && minuten < 60");
+    ok(stunden >= 0 && stunden < 24, "Vorbedingung verletzt: 0 <= stunden < 24");
+    ok(minuten >= 0 && minuten < 60, "Vorbedingung verletzt: 0 <= minuten < 60");
   }
 
   /**
    * Gibt den Stunden-Anteil dieser Uhrzeit zurück.
    *
-   * @ensure (result >= 0) && (result < 24)
+   * @ensure 0 <= result < 24
    */
-  public getStunden() {
+  public getStunden(): number {
     return this.stunden;
   }
 
   /**
    * Gibt den Minuten-Anteil dieser Uhrzeit zurück.
    *
-   * @ensure (result >= 0) && (result < 60)
+   * @ensure 0 <= minuten < 60
    */
-  public getMinuten() {
+  public getMinuten(): number {
     return this.minuten;
   }
 
@@ -50,11 +47,11 @@ export class Uhrzeit implements EqualsHashCode {
    *
    * @param startzeit die Startzeit.
    *
-   * @require startzeit != null
+   * @require truthy startzeit
    * @ensure result >= 0
    */
-  public minutenSeit(startzeit: Uhrzeit) {
-    ok(startzeit != null, "Vorbedingung verletzt: startzeit != null");
+  public minutenSeit(startzeit: Uhrzeit): number {
+    ok(startzeit, "Vorbedingung verletzt: truthy startzeit");
 
     const amSelbenTag = this.stunden > startzeit.stunden
       || (this.stunden === startzeit.stunden && this.minuten >= startzeit.minuten);
@@ -71,31 +68,29 @@ export class Uhrzeit implements EqualsHashCode {
     return result;
   }
 
-  public compareTo(u: Uhrzeit) {
+  /**
+   * Vergleicht diese Uhrzeit mit einer anderen Uhrzeit.
+   *
+   * @param u die andere Uhrzeit.
+   * @return einen Wert kleiner als 0 falls dieses Datum kleiner als datum ist, einen Wert größer als 0, falls dieses
+   * Datum größer als datum ist, sonst 0.
+   */
+  public compareTo(u: Uhrzeit): number {
     return (this.stunden - u.stunden) * 60 + this.minuten - u.minuten;
   }
 
-  public equals(o: any) {
+  public equals(o: any): boolean {
     if (o instanceof Uhrzeit) {
       return this.stunden === o.stunden && this.minuten === o.minuten;
     }
     return false;
   }
 
-  public hashCode() {
+  public hashCode(): number {
     return this.stunden * 60 + this.minuten;
   }
 
-  public toString() {
-    return this.getFormatiertenString();
-  }
-
-  /**
-   * Gibt diese Uhrzeit formatiert zurück in der Schreibweise Stunden:Minuten.
-   *
-   * @ensure result != null
-   */
-  public getFormatiertenString() {
+  public toString(): string {
     let result = this.stunden + ":";
     if (this.minuten < 10) {
       result += "0";

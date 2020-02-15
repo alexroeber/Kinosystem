@@ -3,24 +3,20 @@ import {Vorstellung} from "./Vorstellung";
 import {Datum} from "../fachwerte/Datum";
 
 /**
- * Ein Tagesplan verzeichnet alle Vorstellungen, die in dem Kino an einem
- * bestimmten Tag laufen.
- *
- * @author SE2-Team
- * @version SoSe 2014
+ * Ein Tagesplan verzeichnet alle Vorstellungen, die in dem Kino an einem bestimmten Tag laufen.
  */
 export class Tagesplan {
-  private vorstellungen: Vorstellung[];
+  private readonly vorstellungen: Vorstellung[];
 
   /**
    * Initialisiert einen neuen, leeren Tagesplan.
    *
    * @param tag der Tag.
    *
-   * @require tag != null
+   * @require truthy tag
    */
   public constructor(private tag: Datum) {
-    ok(tag != null, "Vorbedingung verletzt: tag != null");
+    ok(tag, "Vorbedingung verletzt: truthy tag");
 
     this.vorstellungen = [];
   }
@@ -28,9 +24,9 @@ export class Tagesplan {
   /**
    * Gibt das Datum zurück, für das dieser Tagesplan gilt.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getDatum() {
+  public getDatum(): Datum {
     return this.tag;
   }
 
@@ -39,12 +35,12 @@ export class Tagesplan {
    *
    * @param v die Vorstellung.
    *
-   * @require v != null
+   * @require truthy v
    * @require die Vorstellung laeuft an dem Tag dieses Tagesplans
    */
-  public fuegeVorstellungHinzu(v: Vorstellung) {
-    ok(v != null, "Vorbedingung verletzt: v != null");
-    ok(v.getDatum().equals(this.tag), "Vorbedingung verletzt: v.getDatum().equals(_tag)");
+  public fuegeVorstellungHinzu(v: Vorstellung): void {
+    ok(v, "Vorbedingung verletzt: truthy v");
+    ok(v.getDatum().equals(this.tag), "Vorbedingung verletzt: die Vorstellung laeuft an dem Tag dieses Tagesplans");
 
     this.vorstellungen.push(v);
   }
@@ -53,9 +49,9 @@ export class Tagesplan {
    * Gibt alle Vorstellungen des Tages zurück. Die Vorstellungen werden
    * sortiert nach ihrer Anfangszeit zurückgegeben.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
-  public getVorstellungen() {
+  public getVorstellungen(): Vorstellung[] {
     const res = [...this.vorstellungen];
     res.sort((a, b) => a.getAnfangszeit().compareTo(b.getAnfangszeit()));
     return res;

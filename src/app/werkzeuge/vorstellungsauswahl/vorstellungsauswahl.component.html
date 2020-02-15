@@ -3,7 +3,7 @@
   <div (click)="onVorstellung(vorstellung)" *ngFor="let vorstellung of tagesplan.getVorstellungen()"
        [ngClass]="{ausgewaehlt: vorstellung === ausgewaehlteVorstellung}"
        class="item">
-    {{vorstellung.getAnfangszeit()}} - {{vorstellung.getFilm().getFormatiertenString()}}
+    {{vorstellung.getAnfangszeit()}} - {{vorstellung.getFilm()}}
     , {{vorstellung.getKinosaal().getName()}}
   </div>
 </div>

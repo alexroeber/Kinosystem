@@ -1,3 +1,6 @@
+/**
+ * Die Altersfreigaben der FSK.
+ */
 export enum FSK {
   FSK0 = "FSK 0",
   FSK6 = "FSK 6",

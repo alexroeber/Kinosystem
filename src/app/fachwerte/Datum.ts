@@ -1,6 +1,13 @@
 import {ok} from "assert";
 import {EqualsHashCode} from "../shared/EqualsHashCode";
 
+/**
+ * Ein Kalenderdatum, bestehend aus Tag, Monat und Jahr.
+ *
+ * Das Klassenobjekt stellt zwei Hilfsmethoden zur Verfügung, um das heutige
+ * Datum zu ermitteln und zu überprüfen, ob drei Ganzzahlen ein gültiges Datum
+ * bilden.
+ */
 export class Datum implements EqualsHashCode {
   private static readonly MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -13,18 +20,18 @@ export class Datum implements EqualsHashCode {
    *
    * @require istGueltig(tag, monat, jahr)
    *
-   * @ensure getTag() == tag
-   * @ensure getMonat() == monat
-   * @ensure gibtJahr() == jahr
+   * @ensure getTag() === tag
+   * @ensure getMonat() === monat
+   * @ensure gibtJahr() === jahr
    */
   constructor(private readonly tag: number, private readonly monat: number, private readonly jahr: number) {
     ok(Datum.istGueltig(tag, monat, jahr), "Vorbedingung verletzt: istGueltig(tag, monat, jahr)");
   }
 
   /**
-   * Liefert das heutige Datum zurück.
+   * Liefert das heutige Datum.
    *
-   * @ensure result != null
+   * @ensure truthy result
    */
   public static heute(): Datum {
     const date = new Date();
@@ -37,31 +44,21 @@ export class Datum implements EqualsHashCode {
    * @param tag Der Tag im Monat (1..31).
    * @param monat Der Monat im Jahr (1..12).
    * @param jahr Das Jahr.
-   * @return <code>true</code> wenn drei übergebene Zahlen ein gültiges Datum
-   *         ergeben, ansonsten <code>false</code>.
-   */
-  public static istGueltig(tag: number, monat: number, jahr: number) {
-    let gueltig = ((monat >= 1) && (monat <= 12));
-    if (gueltig) {
-      const date = new Date(jahr, monat - 1, tag);
-      gueltig = tag === date.getDate() && monat === date.getMonth() + 1 && jahr === date.getFullYear();
-    }
-    return gueltig;
-  }
-
-  /**
-   * Vergleicht dieses Datum mit einem anderen Datum.
+   * @return <code>true</code> wenn drei übergebene Zahlen ein gültiges Datum ergeben, ansonsten <code>false</code>.
    *
-   * @param datum das andere Datum.
-   * @return einen Wert kleiner als 0 falls dieses Datum kleiner als datum
-   *         ist, einen Wert größer als 0, falls dieses Datum größer als datum
-   *         ist, sonst 0.
+   * @require Ganzzahlen
    */
-  public compareTo(datum: Datum) {
-    return this.tageSeit(datum);
+  public static istGueltig(tag: number, monat: number, jahr: number): boolean {
+    ok(tag % 1 === 0 && monat % 1 === 0 && jahr % 1 === 0, "Vorbedingung verletzt: Ganzzahlen");
+
+    if (monat >= 1 && monat <= 12) {
+      const date = new Date(jahr, monat - 1, tag);
+      return tag === date.getDate() && monat === date.getMonth() + 1 && jahr === date.getFullYear();
+    }
+    return false;
   }
 
-  public equals(o: any) {
+  public equals(o: any): boolean {
     if (o instanceof Datum) {
       return this.getTag() === o.getTag()
         && this.getMonat() === o.getMonat()
@@ -70,28 +67,28 @@ export class Datum implements EqualsHashCode {
     return false;
   }
 
-  public hashCode() {
+  public hashCode(): number {
     return this.getJahr() * 365 + this.getMonat() * 31 + this.getTag();
   }
 
   /**
    * Gibt das Jahr dieses Datums zurück.
    */
-  public getJahr() {
+  public getJahr(): number {
     return this.jahr;
   }
 
   /**
    * Gibt den Monat (im Jahr) dieses Datums zurück (1..12).
    */
-  public getMonat() {
+  public getMonat(): number {
     return this.monat;
   }
 
   /**
    * Gibt den Tag (im Monat) dieses Datums zurück.
    */
-  public getTag() {
+  public getTag(): number {
     return this.tag;
   }
 
@@ -103,10 +100,13 @@ export class Datum implements EqualsHashCode {
    * @return den Tag, der um die angegebene Anzahl Tage vor diesem Tag liegt.
    *
    * @require tage >= 0
-   * @ensure result != null
+   * @require Ganzzahlen
+   * @ensure truthy result
    */
-  public minus(tage: number) {
+  public minus(tage: number): Datum {
     ok(tage >= 0, "Vorbedingung verletzt: tage >= 0");
+    ok(tage % 1 === 0, "Vorbedingung verletzt: Ganzzahlen");
+
     const date = new Date(this.jahr, this.monat - 1, this.tag - tage);
     return new Datum(date.getDate(), date.getMonth() + 1, date.getFullYear());
   }
@@ -119,10 +119,12 @@ export class Datum implements EqualsHashCode {
    * @return den Tag, der um die angegebene Anzahl Tage nach diesem Tag liegt.
    *
    * @require tage >= 0
-   * @ensure result != null
+   * @require Ganzzahlen
+   * @ensure truthy result
    */
-  public plus(tage: number) {
+  public plus(tage: number): Datum {
     ok(tage >= 0, "Vorbedingung verletzt: tage >= 0");
+    ok(tage % 1 === 0, "Vorbedingung verletzt: Ganzzahlen");
     const date = new Date(this.jahr, this.monat - 1, this.tag + tage);
     return new Datum(date.getDate(), date.getMonth() + 1, date.getFullYear());
   }
@@ -132,7 +134,7 @@ export class Datum implements EqualsHashCode {
    *
    * @return den Tag vor diesem Tag.
    */
-  public vorherigerTag() {
+  public vorherigerTag(): Datum {
     return this.minus(1);
   }
 
@@ -141,7 +143,7 @@ export class Datum implements EqualsHashCode {
    *
    * @return den Tag nach diesem Tag.
    */
-  public naechsterTag() {
+  public naechsterTag(): Datum {
     return this.plus(1);
   }
 
@@ -151,10 +153,10 @@ export class Datum implements EqualsHashCode {
    *
    * @param startDatum das Startdatum des Zeitraums.
    *
-   * @require startDatum != null
+   * @require truthy startDatum
    */
-  public tageSeit(startDatum: Datum) {
-    ok(startDatum != null, "Vorbedingung verletzt: startDatum != null");
+  public tageSeit(startDatum: Datum): number {
+    ok(startDatum, "Vorbedingung verletzt: truthy startDatum");
 
     const startMillis = startDatum.inMillisekunden();
     const endMillis = this.inMillisekunden();
@@ -162,28 +164,14 @@ export class Datum implements EqualsHashCode {
     return (endMillis - startMillis) / Datum.MILLISECONDS_PER_DAY;
   }
 
-  /**
-   * Gibt eine String-Repräsentation dieses Datums zurück.
-   *
-   * @ensure result != null
-   */
-  public toString() {
-    return this.getFormatiertenString();
-  }
-
-  /**
-   * Gibt dieses Datum formatiert zurück in der Schreibweise Tag.Monat.Jahr.
-   *
-   * @ensure result != null
-   */
-  public getFormatiertenString() {
+  public toString(): string {
     return this.tag + "." + this.monat + "." + this.jahr;
   }
 
   /**
    * Gibt dieses Datum in Millisekunden zurück.
    */
-  private inMillisekunden() {
+  private inMillisekunden(): number {
     return new Date(this.jahr, this.monat - 1, this.tag).getTime();
   }
 }

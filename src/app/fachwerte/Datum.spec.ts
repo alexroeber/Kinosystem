@@ -1,14 +1,6 @@
 import {Datum} from "./Datum";
 
 describe("Datum", () => {
-  it("Teste compareTo", () => {
-    const datum1 = new Datum(1, 12, 2018);
-    const datum2 = new Datum(1, 1, 2019);
-    expect(datum1.compareTo(datum2)).toBeLessThan(0);
-    expect(datum2.compareTo(datum1)).toBeGreaterThan(0);
-    expect(datum1.compareTo(datum1)).toBe(0);
-  });
-
   it("Teste Konstruktor", () => {
     const datum = new Datum(1, 12, 2019);
     expect(datum.getTag()).toBe(1);
