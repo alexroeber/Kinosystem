@@ -1,13 +1,10 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, Output} from "@angular/core";
 import {Vorstellung} from "../../materialien/Vorstellung";
 import {Tagesplan} from "../../materialien/Tagesplan";
-import {Datum} from "../../fachwerte/Datum";
-import {Kinosaal} from "../../materialien/Kinosaal";
-import {Film} from "../../materialien/Film";
-import {FSK} from "../../fachwerte/FSK";
-import {Uhrzeit} from "../../fachwerte/Uhrzeit";
-import {Geldbetrag} from "../../fachwerte/Geldbetrag";
 
+/**
+ * Equivalent zum VorstellungsAuswaehlWerkzeug
+ */
 @Component({
   selector: "vorstellungsauswahl",
   templateUrl: "./vorstellungsauswahl.component.html",
@@ -20,30 +17,19 @@ export class VorstellungsauswahlComponent implements OnChanges {
   ausgewaehlteVorstellung: Vorstellung;
 
   constructor() {
-    this.tagesplan = new Tagesplan(Datum.heute());
-    const saal = new Kinosaal("Name", 50, 50);
-    const film = new Film("Dies ist ein Film", 120, FSK.FSK0, false);
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(1, 0),
-      new Uhrzeit(3, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(3, 0),
-      new Uhrzeit(5, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(5, 0),
-      new Uhrzeit(7, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(7, 0),
-      new Uhrzeit(9, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(9, 0),
-      new Uhrzeit(11, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
-    this.tagesplan.fuegeVorstellungHinzu(new Vorstellung(saal, film, new Uhrzeit(11, 0),
-      new Uhrzeit(13, 0), Datum.heute(), Geldbetrag.parseGeldbetrag(5, 0)));
     this.vorstellungChanged = new EventEmitter<Vorstellung>();
   }
 
-  onVorstellung(vorstellung: Vorstellung) {
+  /**
+   * UI-Methode, Reaktion auf die Auswahl einer anderen Vorstellung
+   * Setzt die ausgewählte Vorstellung.
+   */
+  onVorstellung(vorstellung: Vorstellung): void {
     this.ausgewaehlteVorstellung = vorstellung;
     this.vorstellungChanged.emit(vorstellung);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(): void {
     this.onVorstellung(this.tagesplan.getVorstellungen()[0]);
   }
 }

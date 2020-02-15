@@ -5,6 +5,11 @@ import {PlatzplanComponent} from "../platzplan/platzplan.component";
 import {Platz} from "../../../fachwerte/Platz";
 import {HashSet} from "../../../shared/HashSet";
 
+/**
+ * Equivalent zum Platzverkaufswerkzeug
+ * Die einzige Stelle, an der nicht nur über Databinding kommuniziert wird. Mit dem Platzplan wird über das
+ * Beobachtermuster kommuniziert.
+ */
 @Component({
   selector: "platzverkauf",
   templateUrl: "./platzverkauf.component.html",
@@ -22,14 +27,22 @@ export class PlatzverkaufComponent implements OnChanges {
   constructor() {
   }
 
-  reagiereAufNeuePlatzAuswahl() {
+  /**
+   * UI-Methode, Reaktion auf das selectionChange-Event
+   * Aktualisiert die Anzeige.
+   */
+  reagiereAufNeuePlatzAuswahl(): void {
     const plaetze = this.platzplan.getAusgewaehltePlaetze();
     this.aktualisiereVerkaufenMoeglich(plaetze);
     this.aktualisiereStornierenMoeglich(plaetze);
     this.aktualisierePreisAnzeige(plaetze);
   }
 
-  verkaufePlaetze(abgeschlossen: boolean) {
+  /**
+   * UI-Methode, Reaktion auf das abgeschlossen-Event
+   * Verkauft die ausgewählten Plätze.
+   */
+  verkaufePlaetze(abgeschlossen: boolean): void {
     if (abgeschlossen) {
       this.vorstellung.verkaufePlaetze(this.platzplan.getAusgewaehltePlaetze());
       this.aktualisierePlatzplan();
@@ -37,17 +50,25 @@ export class PlatzverkaufComponent implements OnChanges {
     this.bezahlungLaeuft = false;
   }
 
-  stornierePlaetze() {
+  /**
+   * UI-Methode, Reaktion auf den Stornieren-Button
+   * Storniert ausgewählte verkaufte Plätze.
+   */
+  stornierePlaetze(): void {
     const plaetze = this.platzplan.getAusgewaehltePlaetze();
     this.vorstellung.stornierePlaetze(plaetze);
     this.aktualisierePlatzplan();
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.aktualisierePlatzplan();
   }
 
-  private aktualisierePreisAnzeige(plaetze: HashSet<Platz>) {
+  /**
+   * Interne Methode, die die Preisanzeige auf den korrekten Wert setzt.
+   * @param plaetze die Plätze dessen Preis berechnet werden soll.
+   */
+  private aktualisierePreisAnzeige(plaetze: HashSet<Platz>): void {
     if (this.vorstellung) {
       this.aktuellerPreis = this.vorstellung.getPreisFuerPlaetze(plaetze);
     } else {
@@ -55,15 +76,26 @@ export class PlatzverkaufComponent implements OnChanges {
     }
   }
 
-  private aktualisiereVerkaufenMoeglich(plaetze: HashSet<Platz>) {
+  /**
+   * Interne Methode, die entscheidet, ob der Verkaufen-Button aktiv sein soll.
+   * @param plaetze die Plätze, die alle verkaufbar sein sollen
+   */
+  private aktualisiereVerkaufenMoeglich(plaetze: HashSet<Platz>): void {
     this.istVerkaufenMoeglich = plaetze.size() && this.vorstellung.sindVerkaufbar(plaetze);
   }
 
-  private aktualisiereStornierenMoeglich(plaetze: HashSet<Platz>) {
+  /**
+   * Interne Methode, die entscheidet, ob der Stornieren-Button aktiv sein soll.
+   * @param plaetze die Plätze, die alle stornierbar sein sollen
+   */
+  private aktualisiereStornierenMoeglich(plaetze: HashSet<Platz>): void {
     this.istStornierenMoeglich = plaetze.size() && this.vorstellung.sindStornierbar(plaetze);
   }
 
-  private aktualisierePlatzplan() {
+  /**
+   * Interne Methode, die den Platzplan aktualisiert. (Größe, verkaufte Plätze)
+   */
+  private aktualisierePlatzplan(): void {
     if (this.vorstellung) {
       const saal = this.vorstellung.getKinosaal();
       this.platzplan.setAnzahlPlaetze(saal.getAnzahlReihen(), saal.getAnzahlSitzeProReihe());

@@ -1,6 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from "@angular/core";
 import {Datum} from "../../fachwerte/Datum";
 
+/**
+ * Equivalent zum DatumAuswaehlWerkzeug
+ */
 @Component({
   selector: "datumsauswahl",
   templateUrl: "./datumsauswahl.component.html",
@@ -16,17 +19,25 @@ export class DatumsauswahlComponent implements OnInit {
     this.ausgewaehltesDatum = Datum.heute();
   }
 
-  zurueck() {
+  /**
+   * UI-Methode, Reaktion auf den "zurück"-Pfeil
+   * Wählt den vorherigen Tag aus.
+   */
+  zurueck(): void {
     this.ausgewaehltesDatum = this.ausgewaehltesDatum.vorherigerTag();
     this.dateChanged.emit(this.ausgewaehltesDatum);
   }
 
-  weiter() {
+  /**
+   * UI-Methode, Reaktion auf den "weiter"-Pfeil
+   * Wählt den nächsten Tag aus.
+   */
+  weiter(): void {
     this.ausgewaehltesDatum = this.ausgewaehltesDatum.naechsterTag();
     this.dateChanged.emit(this.ausgewaehltesDatum);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dateChanged.emit(this.ausgewaehltesDatum);
   }
 }

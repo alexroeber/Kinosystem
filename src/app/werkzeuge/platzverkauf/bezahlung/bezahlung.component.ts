@@ -1,6 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from "@angular/core";
 import {Geldbetrag} from "../../../fachwerte/Geldbetrag";
 
+/**
+ * Equivalent zum Bezahlwerkzeug
+ */
 @Component({
   selector: "bezahlung",
   templateUrl: "./bezahlung.component.html",
@@ -23,23 +26,32 @@ export class BezahlungComponent implements OnChanges {
     this.eingabeInvalid = true;
   }
 
-  abschliessen(abgeschlossen: boolean) {
+  /**
+   * UI-Methode, Reaktion mit <code>false</code> auf Beenden-Button und den Rest des Bildschirms, sowie mit
+   * <code>true</code> auf Abschließen-Button
+   */
+  abschliessen(abgeschlossen: boolean): void {
     this.abgeschlossen.emit(abgeschlossen);
   }
 
-  formSubmit() {
-    try {
-      this.verarbeiteEingabe();
-    } catch (e) {
-    }
+  /**
+   * UI-Methode, Reaktion auf drücken von "Enter" im Textfeld oder des Ok-Buttons
+   * Verarbeitet die Eingabe.
+   */
+  formSubmit(): boolean {
+    this.verarbeiteEingabe();
     return false;
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.ueberschrift = "Zu bezahlen: " + this.betrag;
   }
 
-  private verarbeiteEingabe() {
+  /**
+   * Interne Methode, um das Ergebnis der Eingabe zu bearbeiten. Gültigkeit der Eingabe wird überprüft, sowie eventuell
+   * das Rückgeld oder der fehlende Betrag berechnet.
+   */
+  private verarbeiteEingabe(): void {
     const value = this.eingabe.nativeElement.value;
     const valid = value && Geldbetrag.istGueltig(value);
     if (valid) {
