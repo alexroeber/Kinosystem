@@ -2,6 +2,10 @@ import {Platz} from "../../../fachwerte/Platz";
 import {Game} from "./Game";
 import {Werte} from "./Werte";
 
+/**
+ * Das Spiel Tetris. Anleitung: Die Pfeiltasten steuern den Stein. Nach links oder rechts verschiebt den Stein, nach
+ * unten lässt den Stein schneller fallen und nach oben dreht ihn.
+ */
 export class Tetris extends Game {
   public readonly sleep = 666;
   private readonly BLINKEN = 3;
@@ -40,22 +44,18 @@ export class Tetris extends Game {
     }
   }
 
-  public dispatchKeyEvent(e: KeyboardEvent) {
+  public dispatchKeyEvent(e: KeyboardEvent): void {
     if (!this.halt && !this.eingabe) {
       this.keyPressed(e.key);
     }
   }
 
-  public init(): void {
+  public deactivate(): void {
     this.blinkReihen = [];
     this.blinkt = false;
     this.stein = new Stein();
     this.halt = false;
     this.blink = false;
-  }
-
-  public deactivate(): void {
-    this.init();
   }
 
   public activate(): void {
@@ -69,8 +69,7 @@ export class Tetris extends Game {
   /**
    * Methode für die Bewegung
    *
-   * @param code
-   *            die gedrückte Taste
+   * @param code die gedrückte Taste
    */
   private keyPressed(code: string): void {
     this.eingabe = true;
@@ -130,7 +129,7 @@ export class Tetris extends Game {
   }
 
   /**
-   * Kontrolliert das Blinken beim verschwinden von Reihen
+   * Kontrolliert das Blinken vorm Verschwinden von Reihen
    */
   private blinken(): void {
     if (this.blinkCounter <= 0) {
@@ -195,8 +194,7 @@ export class Tetris extends Game {
   /**
    * Kontrolliert die Bewegung zu Seite.
    *
-   * @param richtung
-   *            > 0 für rechts, < 0 für links
+   * @param richtung > 0 für rechts, < 0 für links
    */
   private zurSeite(richtung: number): void {
     const s = this.kannInRichtungBewegen(richtung);
@@ -218,10 +216,8 @@ export class Tetris extends Game {
   /**
    * Prüft, ob sich die Steine in eine bestimmte Richtung bewegen kann
    *
-   * @param richtung
-   *            = 0 ist nach unten, > 0 ist nach rechts, < 0 ist nach links
-   * @return der gedrehte Stein, falls in die Richtung bewegt werden kann,
-   *         sonst null
+   * @param richtung = 0 ist nach unten, > 0 ist nach rechts, < 0 ist nach links
+   * @return der gedrehte Stein, falls in die Richtung bewegt werden kann, sonst null
    */
   private kannInRichtungBewegen(richtung: number): Stein {
     return this.kannBewegen(this.steinInRichtung(richtung));
@@ -239,8 +235,7 @@ export class Tetris extends Game {
   /**
    * Prüft einen veränderten Stein, ob this.stein in diesen übergehen kann
    *
-   * @param s
-   *            der veränderte Stein
+   * @param s der veränderte Stein
    * @return s, falls this.stein in ihn übergehen kann, sonst null
    */
   private kannBewegen(s: Stein): Stein {
@@ -252,6 +247,10 @@ export class Tetris extends Game {
     return s;
   }
 
+  /**
+   * Gibt einen Stein zurück.
+   * @param richtung = 0 ist nach unten, > 0 ist nach rechts, < 0 ist nach links
+   */
   private steinInRichtung(richtung: number): Stein {
     let x = 0;
     let y = 0;
@@ -265,6 +264,11 @@ export class Tetris extends Game {
     return this.bewegterStein(x, y);
   }
 
+  /**
+   * Gibt den Platz an den angegebenen Koordinaten zurück oder null, wenn der Platz nicht existiert.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   */
   private getPlatzAt(x: number, y: number): Platz {
     if (x < this.werte.anzahlSitzeProReihe && x >= 0 && y < this.werte.anzahlReihen && y >= 0) {
       return new Platz(y, x);
@@ -273,6 +277,10 @@ export class Tetris extends Game {
     }
   }
 
+  /**
+   * Bewegt den aktiven Stein auf die Position des neuen Steins.
+   * @param s der Stein, der die neue Position angibt.
+   */
   private bewege(s: Stein): void {
     for (const platz of this.stein.plaetze) {
       this.werte.verkauft.remove(platz);
@@ -384,11 +392,9 @@ export class Tetris extends Game {
   }
 
   /**
-   * ausgelagerte Methode für das Drehen von "L", "L falsch herum" und
-   * "kurzes T"
+   * ausgelagerte Methode für das Drehen von "L", "L falsch herum" und "kurzes T"
    *
-   * @param s
-   *            der Stein, dessen Mitte gedreht werden soll
+   * @param s der Stein, dessen Mitte gedreht werden soll
    */
   private dreheSteinMitte(s: Stein): void {
     s.xPos[0] = this.stein.xPos[0] === this.stein.xPos[1] ? this.stein.xPos[0] - 1 : this.stein.xPos[0] + 1;
@@ -400,8 +406,7 @@ export class Tetris extends Game {
   }
 
   /**
-   * Diese Methode lässt einen neuen Stein erscheinen und übernimmt außerdem
-   * das Verlieren
+   * Diese Methode lässt einen neuen Stein erscheinen und übernimmt außerdem das Verlieren
    */
   private spawn(): void {
     const spawn = Math.floor(Math.random() * 7);
@@ -501,11 +506,7 @@ export class Tetris extends Game {
 }
 
 /**
- * Diese Klasse stellt einen Block in Tetris dar. Er besteht aus vier
- * JPlatzButtons, sowie ihren Positionen.
- *
- * @author Tsuno
- *
+ * Diese Klasse stellt einen Stein in Tetris dar. Er besteht aus vier <Platz>Plätzen, sowie ihren Positionen.
  */
 class Stein {
   public plaetze: Platz[];
@@ -521,13 +522,12 @@ class Stein {
   }
 
   /**
-   * Prüft, ob ein Button enthalten ist
+   * Prüft, ob ein Platz enthalten ist
    *
-   * @param platz
-   *            der Platz
-   * @return true, wenn der Button enthalten ist, sonst false
+   * @param platz der Platz
+   * @return true, wenn der Platz enthalten ist, sonst false
    */
-  contains(platz: Platz) {
+  contains(platz: Platz): boolean {
     for (const p of this.plaetze) {
       if (platz.equals(p)) {
         return true;
@@ -536,7 +536,10 @@ class Stein {
     return false;
   }
 
-  reihen() {
+  /**
+   * Gibt die Reihen zurück, in denen sich der Stein befindet
+   */
+  reihen(): Set<number> {
     const set = new Set<number>();
     for (let i = 0; i < 4; i++) {
       set.add(this.yPos[i]);

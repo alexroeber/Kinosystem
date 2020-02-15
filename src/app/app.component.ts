@@ -8,6 +8,9 @@ import {Datum} from "./fachwerte/Datum";
 import {Vorstellung} from "./materialien/Vorstellung";
 import {Geldbetrag} from "./fachwerte/Geldbetrag";
 
+/**
+ * Equivalent zur StartupKinoticketverkauf_Blatt07-Klasse
+ */
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",

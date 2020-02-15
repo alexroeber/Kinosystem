@@ -3,6 +3,10 @@ import {HashSet} from "../../../shared/HashSet";
 import {Werte} from "./Werte";
 import {Platz} from "../../../fachwerte/Platz";
 
+/**
+ * Das Spiel Minesweeper. Anleitung: Die Pfeiltasten ändern die Rateposition, "Enter" deckt ein Feld auf, "b" markiert
+ * ein Feld als Bombe. Als Bombe markierte Felder können immer noch aufgedeckt werden.
+ */
 export class MinesweeperGame extends Game {
   public readonly sleep = 1000000;
 
@@ -57,21 +61,24 @@ export class MinesweeperGame extends Game {
     }
   }
 
-  public init(): void {
-  }
-
-  public deactivate() {
+  public deactivate(): void {
   }
 
   public activate(): void {
     this.initState();
   }
 
-  public getName() {
+  public getName(): string {
     return "Minesweeper";
   }
 
-  private checkWin() {
+  /**
+   * Überprüft, ob das Spiel gewonnen wurde, fragt ob das Spiel neugestartet werden soll und tut genau das oder
+   * beendet das Spiel.
+   * Anmerkung: Hacky, da das System nicht für gewonnene Spiele ausgelegt ist und auch nicht dafür, dass ein Spiel
+   * sich selbst beenden kann. Das geht nur übers verlieren.
+   */
+  private checkWin(): void {
     const maxSize = this.werte.anzahlReihen * this.werte.anzahlSitzeProReihe - this.bombs.size();
     if (this.bombs.size() === this.correctBombs.size() || this.werte.verkauft.size() === maxSize) {
       if (confirm("You just won Minesweeper\nRestart?")) {
@@ -85,6 +92,11 @@ export class MinesweeperGame extends Game {
     }
   }
 
+  /**
+   * Rät, dass sich eine Bombe an den angegebenen Koordinaten eine Bombe befindet.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   */
   private guessBomb(x: number, y: number): void {
     const p = new Platz(y, x);
     if (this.bombs.contains(p)) {
@@ -94,6 +106,11 @@ export class MinesweeperGame extends Game {
     this.werte.texts[y][x] = "B";
   }
 
+  /**
+   * Rät, dass sich an den angegebenen Koordinaten keine Bombe befindet.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   */
   private guess(x: number, y: number): void {
     if (this.bombs.contains(new Platz(y, x))) {
       this.bombs.forEach(p => {
@@ -111,11 +128,22 @@ export class MinesweeperGame extends Game {
     }
   }
 
+  /**
+   * Markiert den Platz an den angegebenen Koordinaten als verkauft und schreibt die Anzahl auf das Feld.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   * @param count die Anzahl
+   */
   private mark(x: number, y: number, count: number): void {
     this.werte.texts[y][x] = count > 0 ? count : "\xa0";
     this.werte.verkauft.add(new Platz(y, x));
   }
 
+  /**
+   * Zählt die benachbarten Bomben an den angegebenen Koordinaten.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   */
   private countBombs(x: number, y: number): number {
     let count = 0;
     for (let i = -1; i <= 1; i++) {
@@ -130,6 +158,11 @@ export class MinesweeperGame extends Game {
     return count;
   }
 
+  /**
+   * Deckt alle angrenzenden leeren Felder an den angegebenen Koordinaten auf.
+   * @param x die x-Koordinate
+   * @param y die y-Koordinate
+   */
   private findAll(x: number, y: number): void {
     let set = new HashSet<Platz>();
     set.add(new Platz(y, x));
@@ -157,7 +190,10 @@ export class MinesweeperGame extends Game {
     }
   }
 
-  private initState() {
+  /**
+   * Initialisiert das Spiel. Setzt den Text auf allen Feldern auf nichts.
+   */
+  private initState(): void {
     this.x = this.y = 0;
     if (this.werte.anzahlReihen > 0) {
       this.initBombs();
@@ -172,7 +208,10 @@ export class MinesweeperGame extends Game {
     }
   }
 
-  private initBombs() {
+  /**
+   * Initialisiert die Koordinaten der Bomben.
+   */
+  private initBombs(): void {
     this.bombs = new HashSet<Platz>();
     this.correctBombs = new HashSet<Platz>();
     const bombs = Math.floor(this.werte.anzahlReihen * this.werte.anzahlSitzeProReihe / 10);

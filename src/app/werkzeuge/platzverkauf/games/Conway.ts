@@ -1,21 +1,14 @@
-/**
- * Eine Implementation von Conways Game of Life
- * @author 3roeber
- *
- */
 import {Game} from "./Game";
 import {Werte} from "./Werte";
 import {HashSet} from "../../../shared/HashSet";
 import {Platz} from "../../../fachwerte/Platz";
 
+/**
+ * Eine Implementation von Conway's Game of Life, nutzt markierte Plätze.
+ */
 export class Conway extends Game {
   public readonly sleep;
 
-  /**
-   * Konstruktor nach Erwartungen von AbstractGame
-   * @param gameLoseHandler der gameLoseHandler, so sinnfrei er hier sein mag.
-   * @param werte Werte, die für Games benötigt werden.
-   */
   public constructor(gameLoseHandler: (game: Game) => void, werte: Werte) {
     super(gameLoseHandler, werte);
     this.sleep = 200;
@@ -26,9 +19,6 @@ export class Conway extends Game {
   }
 
   public dispatchKeyEvent(e: KeyboardEvent): void {
-  }
-
-  public init(): void {
   }
 
   public deactivate(): void {

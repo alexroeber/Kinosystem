@@ -1,14 +1,11 @@
-/**
- * Das Spiel Snake. Anleitung: Die Pfeiltasten ändern die Richtung der Schlange
- * und geben im pausierten Zustand auch die Startrichtung an.
- *
- * @author Tsuno
- *
- */
 import {Platz} from "../../../fachwerte/Platz";
 import {Werte} from "./Werte";
 import {Game} from "./Game";
 
+/**
+ * Das Spiel Snake. Anleitung: Die Pfeiltasten ändern die Richtung der Schlange
+ * und geben im pausierten Zustand auch die Startrichtung an.
+ */
 export class Snake extends Game {
   public readonly sleep;
 
@@ -29,28 +26,11 @@ export class Snake extends Game {
     this.lastKey = "";
   }
 
-  /**
-   * Eine Methode zum initialisieren und zuruecksetzen von Snake, ausgelagert
-   * aus setAnzahlPlaetze
-   */
-  public init(): void {
-    this.schlange = [];
-    this.schlangenKopfX = 0;
-    this.schlangenKopfY = 0;
-    this.lastKey = "";
-  }
-
-  /**
-   * Die Methode des Threads für Snake, wiederholt die letzte Richtungstaste
-   * alle 360ms.
-   *
-   * @throws InterruptedException
-   */
   public run(): void {
     this.keyPressed(this.lastKey);
   }
 
-  public dispatchKeyEvent(e: KeyboardEvent) {
+  public dispatchKeyEvent(e: KeyboardEvent): void {
     const code = e.key;
 
     if (this.lastKey !== code && (
@@ -68,20 +48,17 @@ export class Snake extends Game {
   }
 
   public deactivate(): void {
-    this.init();
+    this.schlange = [];
+    this.schlangenKopfX = 0;
+    this.schlangenKopfY = 0;
+    this.lastKey = "";
   }
 
   public getName(): string {
     return "Snake";
   }
 
-  /**
-   * Diese Methode setzt die Tasten zur Steuerung des Spiels um.
-   *
-   * @param code
-   *            die gedrückte Taste
-   */
-  private keyPressed(code: string) {
+  private keyPressed(code: string): void {
     switch (code) {
       case "ArrowLeft":
         this.schlangenKopfX += -1;
@@ -148,10 +125,9 @@ export class Snake extends Game {
   }
 
   /**
-   * Diese Methode versucht 69 mal einen nicht-markierten, nicht-verkauften
-   * JPlatzButton an zufälliger Stelle zurückzugeben.
+   * Diese Methode versucht 69 mal einen nicht-markierten, nicht-verkauften Platz an zufälliger Stelle zurückzugeben.
    *
-   * @return der JPlatzButton oder null
+   * @return der Platz oder null
    */
   private newRandomPlatz(versuch: number): Platz {
     const y = Math.floor(Math.random() * this.werte.anzahlReihen);

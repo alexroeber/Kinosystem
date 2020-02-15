@@ -29,7 +29,7 @@ export class PlatzplanComponent {
   ausgewaehltePlaetze: HashSet<Platz>;
 
   // Variablen für die Spiele
-  private werte: OpenWerte;
+  private readonly werte: OpenWerte;
   private games: Game[];
   private activeGameIndex;
   private gameInterval: number;
@@ -139,7 +139,6 @@ export class PlatzplanComponent {
       new Conway(gameLoseHandler, this.werte)
     ];
     this.activeGameIndex = 0;
-    this.games.forEach(game => game.init());
   }
 
   /**
